@@ -56,7 +56,11 @@ public class Point2D extends StructureGeometrique implements Comparable {
 				color = ColorTools.POINT_NONE;
 		}
 	}
-	
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public Color getColor() {
 		return color;
 	}

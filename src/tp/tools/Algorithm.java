@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class Algorithm {
 	
-	public static List<Point2D> generateRandomPoint(int nbPoint, int w, int h) {
+	public static List<Point2D> generateRandomPoint(int nbPoint, int w, int h, RolePoint role) {
 		
 		List<Point2D> points = new ArrayList<Point2D>();
 		

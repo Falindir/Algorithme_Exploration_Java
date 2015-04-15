@@ -52,7 +52,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	}
 
 	public void drawListRandomPoint (int numberPoints) {
-		points = Algorithm.generateRandomPoint(numberPoints, width, height);
+		points = Algorithm.generateRandomPoint(numberPoints, width, height, RolePoint.BEGIN);
 	}
 	
 	public void drawListFormPoint () {

@@ -9,11 +9,7 @@ import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import tp.tools.Algorithm;
-import tp.tools.Point2D;
-import tp.tools.Segment2D;
-import tp.tools.Triangle2D;
-import tp.tools.View;
+import tp.tools.*;
 
 public class ViewTriangulation extends View {
 	
@@ -43,7 +39,7 @@ public class ViewTriangulation extends View {
 	}
 	
 	public void drawListRandomPoint (int numberPoints) {
-		points = Algorithm.generateRandomPoint(numberPoints, width, height);
+		points = Algorithm.generateRandomPoint(numberPoints, width, height, RolePoint.NONE);
 	}
 	
 	public void drawSameRandomPoint(List<Point2D> points) {
