@@ -13,22 +13,21 @@ public class MainTp2 {
 		int height = 792;
 		
 		ViewEnveloppeConvexe vRP1 = new ViewEnveloppeConvexe(width, height);
-		vRP1.drawListRandomPoint(25);
-
+		vRP1.drawListRandomPoint(50);
+		vRP1.drawEnvConvJarvis();
 		frame.addView(vRP1, "Random Point Jarvis");
 		
 		ViewEnveloppeConvexe vRP2 = new ViewEnveloppeConvexe(width, height);
-		vRP2.drawListRandomPoint(25);
-		vRP2.drawEnvConv();
+		vRP2.drawListRandomPoint(50);
+		vRP2.drawEnvConvGraham();
 		frame.addView(vRP2, "Random Point Graham");
-		
-		ViewEnveloppeConvexe vFP = new ViewEnveloppeConvexe(width, height);
-		vFP.drawListFormPoint();
-		vFP.drawEnvConv();
-		frame.addView(vFP, "Form Point");
-		
-		frame.setFrame();
 
+		ViewEnveloppeConvexe vRP3 = new ViewEnveloppeConvexe(width, height);
+		vRP3.drawListRandomPoint(50);
+		vRP3.drawEnvConvOnionSkin();
+		frame.addView(vRP3, "Random Point Onion");
+
+		frame.setFrame();
 	}
 
 }

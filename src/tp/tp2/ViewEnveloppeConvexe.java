@@ -28,7 +28,11 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	private int height;
 	
 	private List<Point2D> points;
+	private List<Point2D> pointsEnvConvInit;
 	private List<Segment2D> segmentEnvConvexe;
+
+	private List<List<Point2D>> onionSkin = new ArrayList<List<Point2D>>();
+	private List<List<Segment2D>> onionSkinConvexe = new ArrayList<List<Segment2D>>();
 
 	public ViewEnveloppeConvexe(int width, int height) {
 		super(width, height);
@@ -54,15 +58,39 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	public void drawListFormPoint () {
 		points = Algorithm.generateFormePoint(width, height);
 	}
-	
-	public void drawEnvConv () {
+
+	public void drawEnvConvJarvis() {
+
+		pointsEnvConvInit = Algorithm.Jarvis(points);
+
+		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
+	}
+	public void drawEnvConvGraham() {
+
+		pointsEnvConvInit = Algorithm.Graham(points);
 		
-		List<Point2D> pointsEnvConv = Algorithm.Graham(points);	
+		//for(Point2D point : pointsEnvConv)
+			//System.out.println("Points : " + point.getName());
 		
-		for(Point2D point : pointsEnvConv) 
-			System.out.println("Points : " + point.getName());
-		
-		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
+		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
+	}
+
+	public void drawEnvConvOnionSkin() {
+		List<Point2D> pointsInitOnion = new ArrayList<Point2D>();
+		pointsInitOnion.addAll(points);
+
+		while(pointsInitOnion.size() >= 3) {
+			Collections.sort(pointsInitOnion);
+
+			List<Point2D> points = Algorithm.Jarvis(pointsInitOnion);
+
+			onionSkin.add(points);
+
+			onionSkinConvexe.add(Algorithm.generateListSegmentWithPoint(points));
+
+			pointsInitOnion.removeAll(points);
+		}
+
 	}
 
 	@Override
@@ -88,27 +116,42 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 			g2d.setColor(Color.black);
 			s.draw(g2d);
 		}
+
+		for(int i = 0; i < onionSkinConvexe.size(); i++) {
+			for(Segment2D s : onionSkinConvexe.get(i)) {
+				g2d.setColor(Color.black);
+				s.draw(g2d);
+			}
+		}
 		
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-	
+
+		double centerX = width / 2;
+		double centerY = height / 2;
+
+		Point2D center = new Point2D((int)centerX, (int)centerY);
+
 		Point2D p = new Point2D ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
-		p.setName("" + points.size());
-	
-		points.add(p);
-		
-		Collections.sort(points);
-		
-		List<Point2D> pointsEnvConv = Algorithm.Graham(points);
-		
-		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
-		
-		
-		repaint();
-		
+
+		if(center.distance(p) < 300) {
+			p.setName("" + points.size());
+
+			points.add(p);
+			Collections.sort(points);
+
+			pointsEnvConvInit.add(p);
+			Collections.sort(pointsEnvConvInit);
+
+			List<Point2D> pointsEnvConv = Algorithm.Graham(pointsEnvConvInit);
+
+			segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
+
+			repaint();
+		}
 	}
 
 	@Override

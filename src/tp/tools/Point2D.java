@@ -98,5 +98,11 @@ public class Point2D extends StructureGeometrique implements Comparable {
         else if(this.x == otherX) return 0;
         else return 1;
 	}
-	
+
+	public static boolean equals(Point2D p, Point2D p2)
+	{
+		if(p==p2)
+			return true;
+		return p.getX()==p2.getX() && p.getY() == p2.getY();
+	}
 }
