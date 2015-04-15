@@ -1,1 +1,1 @@
-# Algorithme_Exploration_Java
+# Algorithme_Geometrique_Java
