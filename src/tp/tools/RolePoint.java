@@ -5,5 +5,5 @@ public enum RolePoint {
 	BEGIN,
 	END,
 	INTERSECT,
-	ZONE;
+	ZONE
 }
