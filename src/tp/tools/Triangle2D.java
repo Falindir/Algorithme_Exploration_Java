@@ -3,15 +3,14 @@ package tp.tools;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class Triangle2D extends StructureGeometrique {
 
-	private Point2D t1;
-	private Point2D t2;
-	private Point2D t3;
+	private Point2D A;
+	private Point2D B;
+	private Point2D C;
 	
 	private double a;
 	private double b;
@@ -27,79 +26,78 @@ public class Triangle2D extends StructureGeometrique {
 	public Triangle2D(Point2D t1, Point2D t2, Point2D t3) {
 		super("");
 		System.out.println("contructeur");
-		this.t1 = t1;
-		this.t2 = t2;
-		this.t3 = t3;
+
+		this.A = t1;
+		this.B = t2;
+		this.C = t3;
 		this.center = calculCenter();
 		this.rayon = calculRayon();		
 		this.lineColor = ColorTools.SEGMENT;
 		
-		double t1t2 = t1.distance(t2);
-		double t2t3 = t2.distance(t3);
-		double t3t1 = t3.distance(t1);
+		double sa = B.getDistance(C);
+		double sb = A.getDistance(C);
+		double sc = A.getDistance(B);
 		
-		System.out.println("1 : " + t1t2);
-		System.out.println("2 : " + t2t3);
-		System.out.println("3 : " + t3t1);
+		//System.out.println("sa : " + sa);
+		//System.out.println("sb : " + sb);
+		//System.out.println("sc : " + sc);
+
+		double prea = ((car(sb) + car(sc) - car(sa)) / (2 * sb * sc));
+		double preb = ((car(sa) + car(sc) - car(sb)) / (2 * sa * sc));
+		double prec = ((car(sa) + car(sb) - car(sc)) / (2 * sa * sb));
+
+		if(prea > 1)
+			prea = 1;
+		if(prea < -1)
+			prea = -1;
+		if(preb > 1)
+			prea = 1;
+		if(preb < -1)
+			prea = -1;
+		if(prec > 1)
+			prea = 1;
+		if(prec < -1)
+			prea = -1;
+
+		//System.out.println("prea : " + prea);
+		//System.out.println("preb : " + preb);
+		//System.out.println("prec : " + prec);
+
+		a = (180 * Math.acos(prea)) / Math.PI;
+		b = (180 * Math.acos(preb)) / Math.PI;
+		c = (180 *  Math.acos(prec)) / Math.PI;
 		
-		System.out.println("a11 " + ((t1t2*t1t2)+(t3t1*t3t1)-(t2t3*t2t3)));
-		System.out.println("a12 " + 2*(t1t2*t3t1));
-		System.out.println("a13 " + ((t1t2*t1t2)+(t3t1*t3t1)-(t2t3*t2t3))/2*(t1t2*t3t1));
-		
-		a = Math.acos(((t1t2*t1t2)+(t3t1*t3t1)-(t2t3*t2t3))/2*(t1t2*t3t1));
-		b = Math.acos(((t1t2*t1t2)+(t2t3*t2t3)-(t3t1*t3t1))/2*(t1t2*t2t3));
-		c = Math.acos(((t3t1*t3t1)+(t2t3*t2t3)-(t1t2*t1t2))/2*(t3t1*t2t3));
-		
-		System.out.println("A : " + a);
-		System.out.println("B : " + b);
-		System.out.println("C : " + c);
-	}
-	
-	public Triangle2D(String name, Point2D t1, Point2D t2, Point2D t3) {
-		super(name);
-		System.out.println("contructeur");
-		this.t1 = t1;
-		this.t2 = t2;
-		this.t3 = t3;
-		this.rayon = calculRayon();		
-		this.center = calculCenter();
-		this.lineColor = ColorTools.SEGMENT;
-		
-		double t1t2 = t1.distance(t2);
-		double t2t3 = t2.distance(t3);
-		double t3t1 = t3.distance(t1);
-		
-		a = Math.acos(((t1t2*t1t2)+(t3t1*t3t1)-(t2t3*t2t3))/(t1t2*t3t1));
-		b = Math.acos(((t1t2*t1t2)+(t2t3*t2t3)-(t3t1*t3t1))/(t1t2*t2t3));
-		c = Math.acos(((t3t1*t3t1)+(t2t3*t2t3)-(t1t2*t1t2))/(t3t1*t2t3));
+		//System.out.println("A : " + a);
+		//System.out.println("B : " + b);
+		//System.out.println("C : " + c);
 	}
 
-	public Point2D getT1() {
-		return t1;
+	public Point2D getA() {
+		return A;
 	}
 
-	public Point2D getT2() {
-		return t2;
+	public Point2D getB() {
+		return B;
 	}
 
-	public Point2D getT3() {
-		return t3;
+	public Point2D getC() {
+		return C;
 	}
 	
 	public Point2D getCenter() {
 		return center;
 	}
 
-	public void setT1(Point2D t1) {
-		this.t1 = t1;
+	public void setA(Point2D a) {
+		this.A = a;
 	}
 
-	public void setT2(Point2D t2) {
-		this.t2 = t2;
+	public void setB(Point2D b) {
+		this.B = b;
 	}
 
-	public void setT3(Point2D t3) {
-		this.t3 = t3;
+	public void setC(Point2D c) {
+		this.C = c;
 	}
 
 	public void setCenter(Point2D center) {
@@ -122,14 +120,14 @@ public class Triangle2D extends StructureGeometrique {
 	
 	
 	public Point2D calculCenter() {
-		int x1 = t1.getX();
-		int y1 = t1.getY();
+		int x1 = A.getX();
+		int y1 = A.getY();
 		
-		int x2 = t2.getX();
-		int y2 = t2.getY();
+		int x2 = B.getX();
+		int y2 = B.getY();
 		
-		int x3 = t3.getX();
-		int y3 = t3.getY();
+		int x3 = C.getX();
+		int y3 = C.getY();
 		
 		double v,m1, m2, m3, n1, n2, n3;
 		m1 = 2.*(x3-x2); m2 = -2.*(y2-y3); m3 = (y2-y3)*(y2+y3)-(x3-x2)*(x2+x3);
@@ -147,12 +145,12 @@ public class Triangle2D extends StructureGeometrique {
 	
 	public double calculRayon() {
 
-		double pab = t1.distance(t2);
-		double pbc = t2.distance(t3);
-		double pac = t1.distance(t3);
+		double pab = A.distance(B);
+		double pbc = B.distance(C);
+		double pac = A.distance(C);
 		
-		Vector2D vab = new Vector2D(t1, t2);
-		Vector2D vac = new Vector2D(t1, t3);
+		Vector2D vab = new Vector2D(A, B);
+		Vector2D vac = new Vector2D(A, C);
 		
 		double r = (pab * pbc * pac) / (2 * vab.determinant(vac));
 		
@@ -164,9 +162,9 @@ public class Triangle2D extends StructureGeometrique {
 	
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(Color.CYAN);
-		g2d.drawLine(t1.getX(), t1.getY(), t2.getX(), t2.getY());
-		g2d.drawLine(t2.getX(), t2.getY(), t3.getX(), t3.getY());
-		g2d.drawLine(t1.getX(), t1.getY(), t3.getX(), t3.getY());
+		g2d.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
+		g2d.drawLine(B.getX(), B.getY(), C.getX(), C.getY());
+		g2d.drawLine(A.getX(), A.getY(), C.getX(), C.getY());
 		
 		//Shape theCircle = new Ellipse2D.Double(getCenter().getX() - getRayon(), getCenter().getY() - getRayon(), 2.0 * getRayon(), 2.0 * getRayon());
 		//g2d.setColor(Color.BLUE);
@@ -182,9 +180,9 @@ public class Triangle2D extends StructureGeometrique {
 		
 		List<Point2D> points = new ArrayList<Point2D>();
 		
-		points.add(t1);
-		points.add(t2);
-		points.add(t3);
+		points.add(A);
+		points.add(B);
+		points.add(C);
 		
 		return points;		
 	}
@@ -272,13 +270,13 @@ public class Triangle2D extends StructureGeometrique {
 			Triangle2D tempT1 = new Triangle2D(c1, sommetCommun.get(0), c2);
 			Triangle2D tempT2 = new Triangle2D(c1, sommetCommun.get(1), c2);
 			
-			this.setT1(tempT1.getT1());
-			this.setT2(tempT1.getT2());
-			this.setT3(tempT1.getT3());
+			this.setA(tempT1.getA());
+			this.setB(tempT1.getB());
+			this.setC(tempT1.getC());
 			
-			t2.setT1(tempT2.getT1());
-			t2.setT2(tempT2.getT2());
-			t2.setT3(tempT2.getT3());
+			t2.setA(tempT2.getA());
+			t2.setB(tempT2.getB());
+			t2.setC(tempT2.getC());
 		}
 	}
 	
@@ -290,17 +288,18 @@ public class Triangle2D extends StructureGeometrique {
 		
 		List<Double> anglesT1 = this.getAngles();
 		List<Double> anglesT2 = t2.getAngles();
-		
+
 		List<Double> A1 = new ArrayList<Double>();
 		A1.addAll(anglesT1);
 		A1.addAll(anglesT2);
 		
 		Collections.sort(A1);
-		
-		System.out.println("A1");
+		System.out.println("\nA1");
 		for(Double d: A1) 
 			System.out.println(d);
-		
+		System.out.println("\nFin");
+
+		/*
 		List<Triangle2D> flipped = this.getFlip(t2);
 		
 		if(flipped.size() == 2) {
@@ -313,6 +312,7 @@ public class Triangle2D extends StructureGeometrique {
 			Collections.sort(A2);
 			
 			System.out.println("A1");
+
 			for(Double d: A1) 
 				System.out.println(d);
 			
@@ -324,7 +324,11 @@ public class Triangle2D extends StructureGeometrique {
 			}
 		}
 		
-		
+		*/
 		return false;
+	}
+
+	public static double car(double n) {
+		return n * n;
 	}
 }

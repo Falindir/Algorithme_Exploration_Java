@@ -89,6 +89,14 @@ public class Point2D extends StructureGeometrique implements Comparable {
 		
 		return (int) Math.sqrt(X + Y);
 	}
+
+	public double getDistance(Point2D p) {
+
+		double x = ((p.getX() - this.getX()) * (p.getX() - this.getX()));
+		double y = ((p.getY() - this.getY()) * (p.getY() - this.getY()));
+
+		return Math.sqrt(x + y);
+	}
 	
 	public boolean isInFirstX (Point2D p) {
 		return this.getX() < p.getX();

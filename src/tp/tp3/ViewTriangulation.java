@@ -52,9 +52,12 @@ public class ViewTriangulation extends View {
 	
 	public void drawTriangulationDelaunay (List<Triangle2D> triangl) {
 		triangles = Algorithm.triangulationIncrementale(points);
-		triangles.get(0).flip(triangles.get(1));
+
+		triangles = Algorithm.Delaunay(points);
+
+		//triangles.get(0).flip(triangles.get(1));
 		
-		System.out.println(triangles.get(0).isFlippable(triangles.get(1)));
+		//System.out.println(triangles.get(0).isFlippable(triangles.get(1)));
 		
 
 		
