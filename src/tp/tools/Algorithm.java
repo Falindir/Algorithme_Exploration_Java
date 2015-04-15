@@ -124,50 +124,56 @@ public class Algorithm {
 
         return lUpper;
     }
+
+	public static List<Point2D> Voronoi (List<Triangle2D> triangles) {
+
+		List<Point2D> points = new ArrayList<Point2D>();
+
+		List<Triangle2D> triangulation = new ArrayList<Triangle2D>();
+		triangulation.addAll(triangles);
+
+		for(Triangle2D triangle : triangulation) {
+			Point2D point = triangle.getCenter();
+			points.add(point);
+		}
+
+		return points;
+	}
     
     
-    public static List<Triangle2D> Delaunay (List<Point2D> points) {
-    	
-    	List<Triangle2D> triangulation = triangulationIncrementale(points); 
-    	
-    	for(Triangle2D t : triangulation) {
-    		t.addVoisin(triangulation);
-    	}
-    	
-    	boolean flip = true;
-    	
-    	while(flip) {
-    		flip = false;
-    		System.out.println("BITE");
-    		
-    		for(Triangle2D t : triangulation) {
-    			List<Triangle2D> voisin = t.getVoisin();
-    			
-    			boolean flipCont = true;
-    			int i = 0;
-    			System.out.println(voisin.size());
-    			while(i < voisin.size()) {
-    				
-    				System.out.println("FLIP" + t.isFlippable(voisin.get(i)));
-    				if(t.isFlippable(voisin.get(i)))  {
-    					
-    					t.flip(voisin.get(i));
-    					flip = true;
-    					//flipCont = false;
-    				}
-    				i++;
-    			}
-    				
-    		}
-    		
-    	}
-  
-    	
+    public static List<Triangle2D> Delaunay (List<Triangle2D> triangles) {
+
+		System.out.println("In Delaunay" + triangles.size());
+
+		List<Triangle2D> triangulation = new ArrayList<Triangle2D>();
+		triangulation.addAll(triangles);
+
+		boolean flip = true;
+		int cpt = 0;
+		while(flip && cpt < 100) {
+			flip = false;
+
+			for(int i=0;i<triangulation.size();++i) {
+				for(Triangle2D t : triangulation) {
+
+					if(triangulation.get(i) != t && triangulation.get(i).isVoisin(t) && triangulation.get(i).isFlippable(t)) {
+
+						triangulation.get(i).flip(t);
+						flip = true;
+					}
+
+				}
+			}
+			cpt++;
+		}
     	return triangulation;
     }
     
     
-    
+
+
+
+
 
     
 	public static List<Triangle2D> triangulationIncrementale(List<Point2D> points) {
@@ -175,8 +181,7 @@ public class Algorithm {
 		List<Triangle2D> triangles = new ArrayList<Triangle2D>();
 		
 		LinkedList<Point2D> ec = new LinkedList<Point2D>();
-		
-		
+
 		if(!Point2D.isLeft(points.get(0),points.get(1),points.get(2)))
 		{
 			ec.add(points.get(2));
@@ -229,7 +234,6 @@ public class Algorithm {
 				ec.removeLast();
 			ec.addFirst(points.get(i+1));
 			ec.addLast(points.get(i+1));
-		
 		}
 		
 		
@@ -375,5 +379,6 @@ public class Algorithm {
 		
 		return points; 
 	}
-	
+
+
 }

@@ -117,4 +117,13 @@ public class Point2D extends StructureGeometrique implements Comparable {
 			return true;
 		return p.getX()==p2.getX() && p.getY() == p2.getY();
 	}
+
+
+	@Override
+	public String toString() {
+		return "Point2D{" +
+				"y=" + y +
+				", x=" + x +
+				'}';
+	}
 }

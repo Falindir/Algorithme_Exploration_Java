@@ -25,8 +25,6 @@ public class Triangle2D extends StructureGeometrique {
 	
 	public Triangle2D(Point2D t1, Point2D t2, Point2D t3) {
 		super("");
-		System.out.println("contructeur");
-
 		this.A = t1;
 		this.B = t2;
 		this.C = t3;
@@ -116,7 +114,17 @@ public class Triangle2D extends StructureGeometrique {
 		
 		return angles;
 	}
-	
+
+	public List<Point2D> getPoints() {
+		List<Point2D> points = new ArrayList<Point2D>();
+		points.add(A);
+		points.add(B);
+		points.add(C);
+
+		Collections.sort(points);
+
+		return points;
+	}
 	
 	
 	public Point2D calculCenter() {
@@ -216,8 +224,8 @@ public class Triangle2D extends StructureGeometrique {
 	public boolean isVoisin(Triangle2D t2) {
 		List<Point2D> sommets = new ArrayList<Point2D>();
 		sommets.addAll(getSommets());
-		sommets.removeAll(t2.getSommets());
-		if(sommets.size() == 1)
+		sommets.retainAll(t2.getSommets());
+		if(sommets.size() == 2)
 			return true;
 		return false;
 	}
@@ -251,6 +259,8 @@ public class Triangle2D extends StructureGeometrique {
 	}
 	
 	public void flip(Triangle2D t2) {
+
+		/*
 		
 		List<Point2D> sommetCommun = new ArrayList<Point2D>();
 		
@@ -277,7 +287,54 @@ public class Triangle2D extends StructureGeometrique {
 			t2.setA(tempT2.getA());
 			t2.setB(tempT2.getB());
 			t2.setC(tempT2.getC());
-		}
+		}*/
+
+		//Found not common point in first triangle
+		List<Point2D> flipper = new ArrayList<Point2D>();
+		flipper.addAll(getPoints());
+		flipper.removeAll(t2.getPoints());
+
+		//Found not common point in second triangle
+		List<Point2D> flipper2 = new ArrayList<Point2D>();
+		flipper2.addAll(t2.getPoints());
+		flipper2.removeAll(getPoints());
+
+		//Found common points in triangle
+		List<Point2D> flipped = new ArrayList<Point2D>();
+		flipped.addAll(getPoints());
+		flipped.removeAll(flipper);
+
+		//Create
+		List<Point2D> t1 = new ArrayList<Point2D>();
+		t1.addAll(flipper);
+		t1.addAll(flipper2);
+		t1.add(flipped.get(1));
+
+		List<Point2D> other = new ArrayList<Point2D>();
+		other.addAll(flipper);
+		other.addAll(flipper2);
+		other.add(flipped.get(0));
+
+		System.out.println("tutut");
+		System.out.println(t1.get(0).toString());
+		System.out.println(t1.get(1).toString());
+		System.out.println(t1.get(2).toString());
+
+		System.out.println(other.get(0).toString());
+		System.out.println(other.get(1).toString());
+		System.out.println(other.get(2).toString());
+
+		setA(other.get(0));
+		setB(other.get(1));
+		setC(other.get(2));
+
+		this.setCenter(this.calculCenter());
+
+		t2.setA(t1.get(0));
+		t2.setB(t1.get(1));
+		t2.setC(t1.get(2));
+
+		t2.setCenter(t2.calculCenter());
 	}
 	
 	public List<Triangle2D> getVoisin() {
@@ -285,7 +342,8 @@ public class Triangle2D extends StructureGeometrique {
 	}
 	
 	public boolean isFlippable(Triangle2D t2) {
-		
+
+		/*
 		List<Double> anglesT1 = this.getAngles();
 		List<Double> anglesT2 = t2.getAngles();
 
@@ -325,7 +383,17 @@ public class Triangle2D extends StructureGeometrique {
 		}
 		
 		*/
-		return false;
+
+		Circle2D circle = new Circle2D(this);
+		List<Point2D> flipper2 = new ArrayList<Point2D>();
+		flipper2.add(t2.getA());
+		flipper2.add(t2.getB());
+		flipper2.add(t2.getC());
+		flipper2.remove(getA());
+		flipper2.remove(getB());
+		flipper2.remove(getC());
+
+		return circle.isInCircle(flipper2.get(0));
 	}
 
 	public static double car(double n) {

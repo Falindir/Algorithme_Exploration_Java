@@ -18,8 +18,9 @@ public class ViewTriangulation extends View {
 
 	private List<Point2D> points;
 	private List<Triangle2D> triangles;
-	
-	
+
+	private List<Point2D> voronoi;
+
 	public ViewTriangulation(int width, int height) {
 		super(width, height);
 		
@@ -29,7 +30,7 @@ public class ViewTriangulation extends View {
 		
 		this.points = new ArrayList<Point2D>();
 		this.triangles = new ArrayList<Triangle2D>();
-		//this.segmentEnvConvexe = new ArrayList<Segment2D>();
+		this.voronoi = new ArrayList<Point2D>();
 		
 		
 		setFocusable(true);
@@ -46,31 +47,32 @@ public class ViewTriangulation extends View {
 		this.points = points;
 	}
 	
-	public void drawTriangulationIncrementale () {				
+	public void drawTriangulationIncrementale () {
+
 		triangles = Algorithm.triangulationIncrementale(points);
+
+		System.out.println(triangles.size());
 	}
 	
 	public void drawTriangulationDelaunay (List<Triangle2D> triangl) {
 		triangles = Algorithm.triangulationIncrementale(points);
-
-		triangles = Algorithm.Delaunay(points);
-
-		//triangles.get(0).flip(triangles.get(1));
-		
-		//System.out.println(triangles.get(0).isFlippable(triangles.get(1)));
-		
-
-		
-		/*System.out.println("\nT11");
-		for(Point2D p : triangles.get(0).getSommets())
-			System.out.println(p.getName());
-		
-		System.out.println("\nT22");
-		for(Point2D p : triangles.get(1).getSommets())
-			System.out.println(p.getName());*/
-		
+		List<Triangle2D> temp = new ArrayList<Triangle2D>();
+		temp.addAll(Algorithm.Delaunay(triangles));
+		triangles.clear();
+		triangles.addAll(temp);
+		System.out.println("AftherDelaunay" + triangles.size());
 	}
-	
+
+	public void drawTriangulationVoronoi () {
+		triangles = Algorithm.triangulationIncrementale(points);
+		List<Triangle2D> temp = new ArrayList<Triangle2D>();
+		temp.addAll(Algorithm.Delaunay(triangles));
+		triangles.clear();
+		triangles.addAll(temp);
+
+		voronoi.addAll(Algorithm.Voronoi(temp));
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -93,13 +95,40 @@ public class ViewTriangulation extends View {
 
 		int i = 1;
 
+		System.out.println("Paint " + triangles.size());
+
 		for(Triangle2D triangle : triangles) {
 			triangle.draw(g2d);
 			//triangle.getCenter().setName("O" + i);
 			//triangle.getCenter().draw(g2d);
+			//Shape cc = new Ellipse2D.Double(triangle.getCenter().getX() - triangle.getRayon(),
+				//	triangle.getCenter().getY() - triangle.getRayon(),
+				//	2.0 * triangle.getRayon(),
+				//	2.0 * triangle.getRayon());
+			//g2d.setColor(Color.RED);
+			//g2d.draw(cc);
 			i++;
 		}
 
+		for (Point2D p : voronoi) {
+			p.setColor(ColorTools.POINT_INTERSECT);
+			g2d.setColor(p.getColor());
+			p.draw(g2d);
+		}
+
+		if(voronoi.size() > 0) {
+			for (Triangle2D triangle : triangles) {
+				for (Triangle2D triangle2 : triangles) {
+					if(triangle != triangle2) {
+						if(triangle.isVoisin(triangle2)) {
+							Segment2D segment = new Segment2D(triangle.getCenter(), triangle2.getCenter());
+							g2d.setColor(ColorTools.POINT_ZONE);
+							segment.draw(g2d);
+						}
+					}
+				}
+			}
+		}
 			
 	}
 

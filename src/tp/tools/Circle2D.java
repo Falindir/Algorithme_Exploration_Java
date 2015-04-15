@@ -48,5 +48,13 @@ public class Circle2D {
         _radius = r;
     }
 
+    public boolean isInCircle(Point2D point2D) {
+        Vector2D vector = new Vector2D(_center,point2D);
+        return Math.abs(vector.norm()) < Math.abs(_radius);
+
+       // return _center.distance(point2D) < _radius;
+    }
+
 
 }
+

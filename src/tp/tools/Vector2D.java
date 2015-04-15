@@ -38,4 +38,8 @@ public class Vector2D {
 	public int determinant(Vector2D v) {
 		return this.x * v.y - this.y * v.x;
 	}
+
+	public double norm() {
+		return Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2));
+	}
 }
