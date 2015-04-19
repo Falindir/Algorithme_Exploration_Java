@@ -1,4 +1,4 @@
-package tp.tools;
+package tp.tools.Form2D;
 
 public class StructureGeometrique {
 

@@ -1,4 +1,6 @@
-package tp.tools;
+package tp.tools.Form2D;
+
+import tp.tools.ColorTools;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -308,13 +310,13 @@ public class Triangle2D extends StructureGeometrique {
 		List<Point2D> t1 = new ArrayList<Point2D>();
 		t1.addAll(flipper);
 		t1.addAll(flipper2);
-		t1.add(flipped.get(1));
+		t1.add(flipped.get(0));
 
 		List<Point2D> other = new ArrayList<Point2D>();
 		other.addAll(flipper);
 		other.addAll(flipper2);
-		other.add(flipped.get(0));
-
+		other.add(flipped.get(1));
+/*
 		System.out.println("tutut");
 		System.out.println(t1.get(0).toString());
 		System.out.println(t1.get(1).toString());
@@ -322,7 +324,7 @@ public class Triangle2D extends StructureGeometrique {
 
 		System.out.println(other.get(0).toString());
 		System.out.println(other.get(1).toString());
-		System.out.println(other.get(2).toString());
+		System.out.println(other.get(2).toString());*/
 
 		setA(other.get(0));
 		setB(other.get(1));
@@ -392,6 +394,10 @@ public class Triangle2D extends StructureGeometrique {
 		flipper2.remove(getA());
 		flipper2.remove(getB());
 		flipper2.remove(getC());
+/*
+		if(flipper2.size() != 1) {
+			return false;
+		}*/
 
 		return circle.isInCircle(flipper2.get(0));
 	}

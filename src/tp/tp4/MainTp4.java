@@ -19,16 +19,26 @@ public class MainTp4 {
 
 		ViewAlpha vRP2 = new ViewAlpha(width, height);
 		vRP2.drawForm1();
-		vRP2.drawTriangulationDelaunay(FormOfPoint.getForm1());
+		vRP2.drawTriangulationDelaunay(FormOfPoint.getForm1(), 2);
 		frame.addView(vRP2, "Form 1 - Delaunay");
 
 		ViewAlpha vRP3 = new ViewAlpha(width, height);
-		vRP3.drawForm2();
-		frame.addView(vRP3, "Form 2 - points");
+		vRP3.drawForm1();
+		vRP3.drawTriangulationDelaunay(FormOfPoint.getForm1(), 2);
+		vRP3.drawTriangulationAlphaComplexe(20);
+		frame.addView(vRP3, "Form 1 - Alpha complexe");
 
 		ViewAlpha vRP4 = new ViewAlpha(width, height);
+		vRP4.drawForm1();
+		vRP4.drawTriangulationDelaunay(FormOfPoint.getForm1(), 2);
+		vRP4.drawTriangulationAlphaShape(20);
+		frame.addView(vRP4, "Form 1 - Alpha shape");
+
+
+		/*
+		ViewAlpha vRP4 = new ViewAlpha(width, height);
 		vRP4.drawForm2();
-		vRP4.drawTriangulationDelaunay(FormOfPoint.getForm2());
+		vRP4.drawTriangulationDelaunay(FormOfPoint.getForm2(), 2);
 		frame.addView(vRP4, "Form 2 - Delaunay");
 
 		ViewAlpha vRP5 = new ViewAlpha(width, height);
@@ -37,9 +47,9 @@ public class MainTp4 {
 
 		ViewAlpha vRP6 = new ViewAlpha(width, height);
 		vRP6.drawForm3();
-		vRP6.drawTriangulationDelaunay(FormOfPoint.getForm3());
+		vRP6.drawTriangulationDelaunay(FormOfPoint.getForm3(), 2);
 		frame.addView(vRP6, "Form 3 - Delaunay");
-
+*/
 		frame.setFrame();
 	}
 }

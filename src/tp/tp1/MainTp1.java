@@ -12,11 +12,11 @@ public class MainTp1 {
 		int width = 612;
 		int height = 792;
 
-		ViewEnveloppeConvexe vRP1 = new ViewEnveloppeConvexe(width, height);
-		vRP1.drawListRandomPoint(25);
-
+		ViewIntersectSegment vRP1 = new ViewIntersectSegment(width, height);
+		vRP1.drawListRandomPoint(9);
+		vRP1.drawListRandomSegment();
+		vRP1.drawListIntersectRandomSegment();
 		frame.addView(vRP1, "Random Point");
-
 		frame.setFrame();
 	}
 

@@ -15,15 +15,13 @@ import java.util.Collections;
 import java.util.List;
 
 import tp.tools.Algorithm;
-import tp.tools.Point2D;
+import tp.tools.Form2D.Point2D;
 import tp.tools.RolePoint;
-import tp.tools.Segment2D;
+import tp.tools.Form2D.Segment2D;
 import tp.tools.View;
 
 public class ViewEnveloppeConvexe extends View implements MouseWheelListener, MouseListener{
-	
-	private static final long serialVersionUID = 1L;
-	
+
 	private int width; 
 	private int height;
 	

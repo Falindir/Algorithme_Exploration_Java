@@ -1,4 +1,7 @@
-package tp.tools;
+package tp.tools.Form2D;
+
+import tp.tools.ColorTools;
+import tp.tools.RolePoint;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -67,11 +70,20 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(color);
-		Rectangle r = new Rectangle((int)x, (int)y, 3, 3);
+		Rectangle r = new Rectangle(x, y, 3, 3);
 		g2d.fill(r);
 		drawName(g2d);
 	}
-	
+
+	public void draw2(Graphics2D g2d) {
+		g2d.setColor(color);
+		Rectangle r = new Rectangle(x, y, 4, 4);
+		//r.translate(-2, -2);
+		g2d.fill(r);
+		drawName(g2d);
+		//r.translate(2, 2);
+	}
+
 	public void drawName(Graphics2D g2d) {
 		FontMetrics fm = g2d.getFontMetrics();
 		int centeredText = (int) (x - fm.stringWidth(getName())/2 + fm.stringWidth("_"));
@@ -106,8 +118,8 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	public int compareTo(Object o) {
         Point2D other = (Point2D) o;
         int otherX = other.getX();
-        if (this.x < otherX)  return -1;
-        else if(this.x == otherX) return 0;
+        if (this.x < otherX || (this.x == otherX && this.y < other.getY()))  return -1;
+        else if(this.x == otherX ) return 0;
         else return 1;
 	}
 
@@ -125,5 +137,17 @@ public class Point2D extends StructureGeometrique implements Comparable {
 				"y=" + y +
 				", x=" + x +
 				'}';
+	}
+
+	public static double calculCoordX(double m1, double p1, double m2, double p2) {
+
+		if((m1 - m2) == 0)
+			return 0;
+		else
+			return ((p2 - p1) / (m1 - m2));
+	}
+
+	public static double calculCoordY(double m, double p, double x) {
+		return (m * x) + p;
 	}
 }

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tp.tools.*;
+import tp.tools.Form2D.Point2D;
+import tp.tools.Form2D.Segment2D;
+import tp.tools.Form2D.Triangle2D;
 
 public class ViewTriangulation extends View {
 	

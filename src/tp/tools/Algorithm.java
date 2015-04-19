@@ -1,13 +1,26 @@
 package tp.tools;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import tp.tools.Form2D.*;
+
+import java.util.*;
 
 public class Algorithm {
+
+	public static List<Point2D> generateRandomPointForSegment(int nbPoint, int w, int h, RolePoint role) {
+		List<Point2D> points = new ArrayList<Point2D>();
+
+		Random rand = new Random();
+
+		while(points.size() <= nbPoint) {
+			Point2D p = new Point2D(rand.nextInt(w+500)+50, rand.nextInt(h+600)+50);
+
+			points.add(p);
+			p.setRole(RolePoint.NONE);
+		}
+
+		return points;
+	}
 	
 	public static List<Point2D> generateRandomPoint(int nbPoint, int w, int h, RolePoint role) {
 		
@@ -139,7 +152,67 @@ public class Algorithm {
 
 		return points;
 	}
-    
+
+	public static List<Segment2DWithTriangle2D> AlphaShape (List<Triangle2D> triangles, double alpha, List<Point2D> points) {
+
+		List<Segment2DWithTriangle2D> alphaTriangulation = new ArrayList<Segment2DWithTriangle2D>();
+
+		Set<Segment2DWithTriangle2D> segments = new HashSet<Segment2DWithTriangle2D>();
+
+		for(Triangle2D triangle : triangles) {
+			Segment2DWithTriangle2D s1 = new Segment2DWithTriangle2D(triangle.getA(), triangle.getB(), points, alpha);
+			Segment2DWithTriangle2D s2 = new Segment2DWithTriangle2D(triangle.getA(), triangle.getB(), points, alpha);
+			Segment2DWithTriangle2D s3 = new Segment2DWithTriangle2D(triangle.getA(), triangle.getB(), points, alpha);
+
+			if(segments.contains(s1))
+				s1.setTriangle2(triangle);
+			else {
+				s1.setTriangle(triangle);
+				segments.add(s1);
+			}
+
+			if(segments.contains(s2))
+				s2.setTriangle2(triangle);
+			else {
+				s2.setTriangle(triangle);
+				segments.add(s2);
+			}
+
+			if(segments.contains(s3))
+				s3.setTriangle2(triangle);
+			else {
+				s3.setTriangle(triangle);
+				segments.add(s3);
+			}
+
+		}
+
+
+		for(Segment2DWithTriangle2D segment : segments) {
+			segment.calculShape();
+			if(segment.isOk())
+				alphaTriangulation.add(segment);
+		}
+
+		return alphaTriangulation;
+	}
+
+
+	public static List<Triangle2D> AlphaComplex (List<Triangle2D> triangles, double alpha) {
+
+		List<Triangle2D> alphaTriangulation = new ArrayList<Triangle2D>();
+
+		for(Triangle2D triangle : triangles) {
+			Circle2D circle = new Circle2D(triangle);
+
+			if(circle.getRadius() <= alpha) {
+				alphaTriangulation.add(triangle);
+			}
+
+		}
+
+		return alphaTriangulation;
+	}
     
     public static List<Triangle2D> Delaunay (List<Triangle2D> triangles) {
 
@@ -182,18 +255,18 @@ public class Algorithm {
 		
 		LinkedList<Point2D> ec = new LinkedList<Point2D>();
 
-		if(!Point2D.isLeft(points.get(0),points.get(1),points.get(2)))
+		if(!Point2D.isLeft(points.get(0),points.get(2),points.get(1)))
 		{
 			ec.add(points.get(2));
-			ec.add(points.get(1));
 			ec.add(points.get(0));
+			ec.add(points.get(1));
 			ec.add(points.get(2));
 		}
 		else
 		{
 			ec.add(points.get(2));
-			ec.add(points.get(0));
 			ec.add(points.get(1));
+			ec.add(points.get(0));
 			ec.add(points.get(2));
 		}
 		triangles.add(new Triangle2D(ec.get(0), ec.get(1), ec.get(2)));
@@ -205,7 +278,7 @@ public class Algorithm {
 			Vector2D line=new Vector2D(points.get(i+1),ec.get(j));
 			Vector2D line2=new Vector2D(points.get(i+1),ec.get(j+1));
 			
-			while(line.determinant(line2)<0)
+			while(line.determinant(line2)<=0)
 			{
 				triangles.add(new Triangle2D(ec.get(j),ec.get(j+1),points.get(i+1)));
 				j++;
@@ -218,7 +291,7 @@ public class Algorithm {
 			line=new Vector2D(points.get(i+1),ec.get(j));
 			line2=new Vector2D(points.get(i+1),ec.get(j-1));
 			
-			while(line.determinant(line2)>0)
+			while(line.determinant(line2)>=0)
 			{
 				triangles.add(new Triangle2D(ec.get(j),ec.get(j-1),points.get(i+1)));
 				j--;

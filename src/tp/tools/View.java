@@ -20,7 +20,6 @@ public abstract class View extends JPanel {
 		setPreferredSize(new Dimension(width, height));
 		setBackground(ColorTools.BACKGROUND);
 	}
-	
-	
+
 
 }

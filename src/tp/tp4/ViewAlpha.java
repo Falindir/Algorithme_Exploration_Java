@@ -1,9 +1,11 @@
 package tp.tp4;
 
 import tp.tools.*;
+import tp.tools.Form2D.Point2D;
+import tp.tools.Form2D.Segment2DWithTriangle2D;
+import tp.tools.Form2D.Triangle2D;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,6 +18,8 @@ public class ViewAlpha extends View {
     private List<Point2D> points;
     private List<Triangle2D> triangles;
 
+    private List<Segment2DWithTriangle2D> segments;
+
     public ViewAlpha(int width, int height) {
         super(width, height);
 
@@ -24,6 +28,7 @@ public class ViewAlpha extends View {
 
         this.points = new ArrayList<Point2D>();
         this.triangles = new ArrayList<Triangle2D>();
+        this.segments = new ArrayList<Segment2DWithTriangle2D>();
 
         setFocusable(true);
         requestFocus();
@@ -65,17 +70,30 @@ public class ViewAlpha extends View {
 
         System.out.println("Paint " + triangles.size());
 
-        for(Triangle2D triangle : triangles) {
-            triangle.draw(g2d);
-            //triangle.getCenter().setName("O" + i);
-            //triangle.getCenter().draw(g2d);
-            i++;
+        if(segments.size() == 0) {
+
+            for (Triangle2D triangle : triangles) {
+                triangle.draw(g2d);
+                //triangle.getCenter().setName("O" + i);
+                //triangle.getCenter().draw(g2d);
+                i++;
+            }
+
+        }
+
+        for(Segment2DWithTriangle2D segment : segments) {
+            segment.draw(g2d);
         }
 
 
     }
 
-    public void drawTriangulationDelaunay (List<Point2D> point) {
+    public void drawTriangulationAlphaComplexe(int alpha){
+        triangles = Algorithm.AlphaComplex(triangles, alpha);
+
+    }
+
+    public void drawTriangulationDelaunay (List<Point2D> point, int type) {
 
         List<Point2D> p = new ArrayList<Point2D>();
         p.addAll(point);
@@ -85,6 +103,24 @@ public class ViewAlpha extends View {
         temp.addAll(Algorithm.Delaunay(triangles));
         triangles.clear();
         triangles.addAll(temp);
+/*
+
+/*
+        if(type == 1) {
+            triangles.clear();
+            triangles.addAll(FormOfPoint.getForm1Triangle());
+
+        }
+        else {
+            triangles.clear();
+            triangles.addAll(FormOfPoint.getForm1Triangle());
+            List<Triangle2D> temp = new ArrayList<Triangle2D>();
+            temp.addAll(Algorithm.Delaunay(triangles));
+            triangles.clear();
+            triangles.addAll(temp);
+
+        }*/
+
     }
 
     public List<Point2D> getPoints() {
@@ -93,5 +129,9 @@ public class ViewAlpha extends View {
 
     public List<Triangle2D> getTriangles() {
         return triangles;
+    }
+
+    public void drawTriangulationAlphaShape(int alpha) {
+        segments.addAll(Algorithm.AlphaShape(triangles, alpha, points));
     }
 }
