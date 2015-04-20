@@ -210,6 +210,23 @@ public class FormOfPoint {
             points.add(point);
         }
 
+        Collections.sort(points);
+
+        List<Point2D> pp = new ArrayList<Point2D>();
+
+        for(int i = 0; i < points.size() - 1; i++) {
+
+            if(points.get(i).getX() == points.get(i+1).getX() && points.get(i).getY() == points.get(i+1).getY() ) {
+                pp.add(points.get(i));
+            }
+        }
+
+        for(Point2D i : pp) {
+            points.remove(i);
+        }
+
+        Collections.sort(points);
+
         return points;
     }
 

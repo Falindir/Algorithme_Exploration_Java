@@ -5,8 +5,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import tp.tools.*;
@@ -14,7 +19,7 @@ import tp.tools.Form2D.Point2D;
 import tp.tools.Form2D.Segment2D;
 import tp.tools.Form2D.Triangle2D;
 
-public class ViewTriangulation extends View {
+public class ViewTriangulation extends View implements MouseWheelListener, MouseListener {
 	
 	private int width; 
 	private int height;
@@ -23,6 +28,10 @@ public class ViewTriangulation extends View {
 	private List<Triangle2D> triangles;
 
 	private List<Point2D> voronoi;
+
+	private boolean inc = false;
+	private boolean delaunay = false;
+	private boolean voronay = false;
 
 	public ViewTriangulation(int width, int height) {
 		super(width, height);
@@ -34,12 +43,12 @@ public class ViewTriangulation extends View {
 		this.points = new ArrayList<Point2D>();
 		this.triangles = new ArrayList<Triangle2D>();
 		this.voronoi = new ArrayList<Point2D>();
-		
-		
+
+		addMouseListener(this);
+		addMouseWheelListener(this);
+
 		setFocusable(true);
 		requestFocus();
-		
-		
 	}
 	
 	public void drawListRandomPoint (int numberPoints) {
@@ -52,12 +61,15 @@ public class ViewTriangulation extends View {
 	
 	public void drawTriangulationIncrementale () {
 
+		inc = true;
+
 		triangles = Algorithm.triangulationIncrementale(points);
 
 		System.out.println(triangles.size());
 	}
 	
 	public void drawTriangulationDelaunay (List<Triangle2D> triangl) {
+		delaunay = true;
 		triangles = Algorithm.triangulationIncrementale(points);
 		List<Triangle2D> temp = new ArrayList<Triangle2D>();
 		temp.addAll(Algorithm.Delaunay(triangles));
@@ -67,6 +79,7 @@ public class ViewTriangulation extends View {
 	}
 
 	public void drawTriangulationVoronoi () {
+		voronay = true;
 		triangles = Algorithm.triangulationIncrementale(points);
 		List<Triangle2D> temp = new ArrayList<Triangle2D>();
 		temp.addAll(Algorithm.Delaunay(triangles));
@@ -142,10 +155,62 @@ public class ViewTriangulation extends View {
 	public List<Triangle2D> getTriangles() {
 		return triangles;
 	}
-	
-	
-	
-	
-	
-	
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Point2D p = new Point2D((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
+		p.setName("" + points.size());
+		points.add(p);
+		Collections.sort(points);
+
+		if(inc) {
+			triangles = Algorithm.triangulationIncrementale(points);
+			repaint();
+		}
+		if(delaunay) {
+			triangles = Algorithm.triangulationIncrementale(points);
+			List<Triangle2D> temp = new ArrayList<Triangle2D>();
+			temp.addAll(Algorithm.Delaunay(triangles));
+			triangles.clear();
+			triangles.addAll(temp);
+			repaint();
+		}
+		if(voronay) {
+			triangles = Algorithm.triangulationIncrementale(points);
+			List<Triangle2D> temp = new ArrayList<Triangle2D>();
+			temp.addAll(Algorithm.Delaunay(triangles));
+			triangles.clear();
+			triangles.addAll(temp);
+			voronoi.addAll(Algorithm.Voronoi(temp));
+			repaint();
+		}
+
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent mouseEvent) {
+
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
+
+	}
 }

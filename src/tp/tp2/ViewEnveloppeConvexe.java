@@ -32,6 +32,8 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	private List<List<Point2D>> onionSkin = new ArrayList<List<Point2D>>();
 	private List<List<Segment2D>> onionSkinConvexe = new ArrayList<List<Segment2D>>();
 
+	private boolean onion = false;
+
 	public ViewEnveloppeConvexe(int width, int height) {
 		super(width, height);
 		
@@ -74,6 +76,8 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	}
 
 	public void drawEnvConvOnionSkin() {
+		onion = true;
+
 		List<Point2D> pointsInitOnion = new ArrayList<Point2D>();
 		pointsInitOnion.addAll(points);
 
@@ -128,25 +132,52 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		double centerX = width / 2;
-		double centerY = height / 2;
+		if(!onion) {
+			double centerX = width / 2;
+			double centerY = height / 2;
 
-		Point2D center = new Point2D((int)centerX, (int)centerY);
+			Point2D center = new Point2D((int) centerX, (int) centerY);
 
-		Point2D p = new Point2D ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
+			Point2D p = new Point2D((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
 
-		if(center.distance(p) < 300) {
-			p.setName("" + points.size());
+			if (center.distance(p) < 300) {
+				p.setName("" + points.size());
 
+				points.add(p);
+				Collections.sort(points);
+
+				pointsEnvConvInit.add(p);
+				Collections.sort(pointsEnvConvInit);
+
+				List<Point2D> pointsEnvConv = Algorithm.Graham(pointsEnvConvInit);
+
+				segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
+
+				repaint();
+			}
+		}
+		else {
+			Point2D p = new Point2D((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
+			p.setName(""+points.size());
 			points.add(p);
-			Collections.sort(points);
+			List<Point2D> pointsInitOnion = new ArrayList<Point2D>();
+			pointsInitOnion.addAll(points);
 
-			pointsEnvConvInit.add(p);
-			Collections.sort(pointsEnvConvInit);
+			onionSkin.clear();
+			onionSkinConvexe.clear();
 
-			List<Point2D> pointsEnvConv = Algorithm.Graham(pointsEnvConvInit);
+			while(pointsInitOnion.size() >= 3) {
+				Collections.sort(pointsInitOnion);
 
-			segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
+				List<Point2D> points = Algorithm.Jarvis(pointsInitOnion);
+
+
+				onionSkin.add(points);
+
+				onionSkinConvexe.add(Algorithm.generateListSegmentWithPoint(points));
+
+				pointsInitOnion.removeAll(points);
+			}
 
 			repaint();
 		}

@@ -93,6 +93,13 @@ public class ViewAlpha extends View {
 
     }
 
+    public void drawTriangulationIncrementale(List<Point2D> point) {
+        List<Point2D> p = new ArrayList<Point2D>();
+        p.addAll(point);
+        Collections.sort(p);
+        triangles = Algorithm.triangulationIncrementale(p);
+    }
+
     public void drawTriangulationDelaunay (List<Point2D> point, int type) {
 
         List<Point2D> p = new ArrayList<Point2D>();

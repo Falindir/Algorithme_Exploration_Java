@@ -5,8 +5,6 @@ import tp.tools.FrameGeometric;
 public class MainTp2 {
 
 	public static void main(String[] args) {
-		
-		
 		FrameGeometric frame = new FrameGeometric ("TP2 - Géométrie algorithmique");
 		
 		int width = 612;
