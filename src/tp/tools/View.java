@@ -21,5 +21,13 @@ public abstract class View extends JPanel {
 		setBackground(ColorTools.BACKGROUND);
 	}
 
+	@Override
+	public int getWidth() {
+		return width;
+	}
 
+	@Override
+	public int getHeight() {
+		return height;
+	}
 }
