@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 
 public class Point2D extends StructureGeometrique implements Comparable {
 
-	private int x;
+	private int _coordX;
 	private int y;
 	
 	private RolePoint role;
@@ -18,7 +18,7 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	
 	public Point2D(int x, int y) {
 		super("");
-		this.x = x;
+		_coordX = x;
 		this.y = y;
 		setRole(RolePoint.NONE);
 		this.color = ColorTools.POINT_NONE;
@@ -26,13 +26,13 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	
 	public Point2D(int x, int y, RolePoint role) {
 		super("");
-		this.x = x;
+		_coordX = x;
 		this.y = y;
 		setRole(role);
 	}
 	
 	public int getX() {
-		return x;
+		return _coordX;
 	}
 
 	public int getY() {
@@ -70,14 +70,14 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(color);
-		Rectangle r = new Rectangle(x, y, 3, 3);
+		Rectangle r = new Rectangle(_coordX, y, 3, 3);
 		g2d.fill(r);
 		drawName(g2d);
 	}
 
 	public void draw2(Graphics2D g2d) {
 		g2d.setColor(color);
-		Rectangle r = new Rectangle(x, y, 4, 4);
+		Rectangle r = new Rectangle(_coordX, y, 4, 4);
 		//r.translate(-2, -2);
 		g2d.fill(r);
 		drawName(g2d);
@@ -86,12 +86,12 @@ public class Point2D extends StructureGeometrique implements Comparable {
 
 	public void drawName(Graphics2D g2d) {
 		FontMetrics fm = g2d.getFontMetrics();
-		int centeredText = (int) (x - fm.stringWidth(getName())/2 + fm.stringWidth("_"));
+		int centeredText = (int) (_coordX - fm.stringWidth(getName())/2 + fm.stringWidth("_"));
 		g2d.drawString(getName(), centeredText, (int) (y-2));		
 	}
 	
     public static boolean isLeft(Point2D a, Point2D b, Point2D c) {
-        return ( (b.x-a.x)*(c.y-a.y) - (b.y-a.y)*(c.x-a.x) ) >= 0;
+        return ( (b._coordX-a._coordX)*(c.y-a.y) - (b.y-a.y)*(c._coordX-a._coordX) ) >= 0;
     }
 
 	public int distance (Point2D p) {
@@ -118,8 +118,8 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	public int compareTo(Object o) {
         Point2D other = (Point2D) o;
         int otherX = other.getX();
-        if (this.x < otherX || (this.x == otherX && this.y < other.getY()))  return -1;
-        else if(this.x == otherX ) return 0;
+        if (_coordX < otherX || (_coordX == otherX && this.y < other.getY()))  return -1;
+        else if(_coordX == otherX ) return 0;
         else return 1;
 	}
 
@@ -135,7 +135,7 @@ public class Point2D extends StructureGeometrique implements Comparable {
 	public String toString() {
 		return "Point2D{" +
 				"y=" + y +
-				", x=" + x +
+				", x=" + _coordX +
 				'}';
 	}
 

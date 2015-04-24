@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class Segment2DWithTriangle2D extends  Segment2D{
 
-    private Triangle2D triangle = null;
-    private Triangle2D triangle2 = null;
+    private Triangle2D _triangle = null;
+    private Triangle2D _triangle2 = null;
 
     private Circle2D circle;
 
@@ -32,7 +32,7 @@ public class Segment2DWithTriangle2D extends  Segment2D{
     }
 
     public Triangle2D getTriangle() {
-        return triangle;
+        return _triangle;
     }
 
     public void calculShape() {
@@ -60,15 +60,15 @@ public class Segment2DWithTriangle2D extends  Segment2D{
     }
 
     public void setTriangle(Triangle2D triangle) {
-        this.triangle = triangle;
+        _triangle = triangle;
     }
 
     public Triangle2D getTriangle2() {
-        return triangle2;
+        return _triangle2;
     }
 
     public void setTriangle2(Triangle2D triangle2) {
-        this.triangle2 = triangle2;
+        _triangle2 = triangle2;
     }
 
     public void calculA() {
@@ -76,26 +76,26 @@ public class Segment2DWithTriangle2D extends  Segment2D{
     }
 
     public void calculABis() {
-        Circle2D circle = new Circle2D(triangle);
+        Circle2D circle = new Circle2D(_triangle);
 
-        if(triangle2 == null)
+        if(_triangle2 == null)
            A = circle.getRadius();
 
         else {
-            Circle2D circle2 = new Circle2D(triangle2);
+            Circle2D circle2 = new Circle2D(_triangle2);
             A = Math.min(circle.getRadius(), circle2.getRadius());
         }
 
     }
 
     public void calculB() {
-        Circle2D circle = new Circle2D(triangle);
+        Circle2D circle = new Circle2D(_triangle);
 
-        if(triangle2 == null)
+        if(_triangle2 == null)
            B = circle.getRadius();
 
         else {
-            Circle2D circle2 = new Circle2D(triangle2);
+            Circle2D circle2 = new Circle2D(_triangle2);
             B = Math.max(circle.getRadius(), circle2.getRadius());
         }
 

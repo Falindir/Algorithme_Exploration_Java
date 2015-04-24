@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import tp.tools.Algorithm;
+import tp.tools.ColorTools;
 import tp.tools.Form2D.Point2D;
 import tp.tools.RolePoint;
 import tp.tools.Form2D.Segment2D;
@@ -31,6 +32,9 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 
 	private List<List<Point2D>> onionSkin = new ArrayList<List<Point2D>>();
 	private List<List<Segment2D>> onionSkinConvexe = new ArrayList<List<Segment2D>>();
+
+	private boolean _Jarvis = false;
+	private boolean _Graham = false;
 
 	private boolean onion = false;
 
@@ -61,17 +65,18 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 
 	public void drawEnvConvJarvis() {
 
+		_Jarvis = true;
+
 		pointsEnvConvInit = Algorithm.Jarvis(points);
 
 		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
 	}
 	public void drawEnvConvGraham() {
 
+		_Graham = true;
+
 		pointsEnvConvInit = Algorithm.Graham(points);
-		
-		//for(Point2D point : pointsEnvConv)
-			//System.out.println("Points : " + point.getName());
-		
+
 		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
 	}
 
@@ -115,13 +120,26 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		}
 	
 		for (Segment2D s: segmentEnvConvexe) {
-			g2d.setColor(Color.black);
-			s.draw(g2d);
+			System.out.println(_Jarvis);
+			if(_Jarvis) {
+				s.setLineColor(Color.MAGENTA);
+				s.draw(g2d);
+			}
+			if(_Graham) {
+				s.setLineColor(Color.GREEN);
+				s.draw(g2d);
+			}
+			else {
+				//s.draw(g2d);
+			}
 		}
 
 		for(int i = 0; i < onionSkinConvexe.size(); i++) {
+
+			Color c = ColorTools.getRandomColor();
+
 			for(Segment2D s : onionSkinConvexe.get(i)) {
-				g2d.setColor(Color.black);
+				s.setLineColor(c);
 				s.draw(g2d);
 			}
 		}

@@ -10,37 +10,30 @@ import java.util.List;
 
 public class Triangle2D extends StructureGeometrique {
 
-	private Point2D A;
-	private Point2D B;
+	private Point2D _A;
+	private Point2D _B;
 	private Point2D C;
 	
 	private double a;
 	private double b;
 	private double c;
 	
-	private Point2D center; // cercle circonscrit
-	private double rayon; // cercle circonscrit
+	private Point2D _center; // cercle circonscrit
+	private double _rayon; // cercle circonscrit
 	
-	private List<Triangle2D> voisin = new ArrayList<Triangle2D>();
-	
-	private Color lineColor;
-	
+	private List<Triangle2D> _neighbors = new ArrayList<Triangle2D>();
+
 	public Triangle2D(Point2D t1, Point2D t2, Point2D t3) {
 		super("");
-		this.A = t1;
-		this.B = t2;
+		_A = t1;
+		_B = t2;
 		this.C = t3;
-		this.center = calculCenter();
-		this.rayon = calculRayon();		
-		this.lineColor = ColorTools.SEGMENT;
+		_center = calculCenter();
+		_rayon = calculRayon();
 		
-		double sa = B.getDistance(C);
-		double sb = A.getDistance(C);
-		double sc = A.getDistance(B);
-		
-		//System.out.println("sa : " + sa);
-		//System.out.println("sb : " + sb);
-		//System.out.println("sc : " + sc);
+		double sa = _B.getDistance(C);
+		double sb = _A.getDistance(C);
+		double sc = _A.getDistance(_B);
 
 		double prea = ((car(sb) + car(sc) - car(sa)) / (2 * sb * sc));
 		double preb = ((car(sa) + car(sc) - car(sb)) / (2 * sa * sc));
@@ -51,33 +44,25 @@ public class Triangle2D extends StructureGeometrique {
 		if(prea < -1)
 			prea = -1;
 		if(preb > 1)
-			prea = 1;
+			preb = 1;
 		if(preb < -1)
-			prea = -1;
+			preb = -1;
 		if(prec > 1)
-			prea = 1;
+			prec = 1;
 		if(prec < -1)
-			prea = -1;
-
-		//System.out.println("prea : " + prea);
-		//System.out.println("preb : " + preb);
-		//System.out.println("prec : " + prec);
+			prec = -1;
 
 		a = (180 * Math.acos(prea)) / Math.PI;
 		b = (180 * Math.acos(preb)) / Math.PI;
 		c = (180 *  Math.acos(prec)) / Math.PI;
-		
-		//System.out.println("A : " + a);
-		//System.out.println("B : " + b);
-		//System.out.println("C : " + c);
 	}
 
 	public Point2D getA() {
-		return A;
+		return _A;
 	}
 
 	public Point2D getB() {
-		return B;
+		return _B;
 	}
 
 	public Point2D getC() {
@@ -85,15 +70,15 @@ public class Triangle2D extends StructureGeometrique {
 	}
 	
 	public Point2D getCenter() {
-		return center;
+		return _center;
 	}
 
 	public void setA(Point2D a) {
-		this.A = a;
+		_A = a;
 	}
 
 	public void setB(Point2D b) {
-		this.B = b;
+		_B = b;
 	}
 
 	public void setC(Point2D c) {
@@ -101,7 +86,7 @@ public class Triangle2D extends StructureGeometrique {
 	}
 
 	public void setCenter(Point2D center) {
-		this.center = center;
+		_center = center;
 	}
 	
 	
@@ -119,8 +104,8 @@ public class Triangle2D extends StructureGeometrique {
 
 	public List<Point2D> getPoints() {
 		List<Point2D> points = new ArrayList<Point2D>();
-		points.add(A);
-		points.add(B);
+		points.add(_A);
+		points.add(_B);
 		points.add(C);
 
 		Collections.sort(points);
@@ -130,11 +115,11 @@ public class Triangle2D extends StructureGeometrique {
 	
 	
 	public Point2D calculCenter() {
-		int x1 = A.getX();
-		int y1 = A.getY();
+		int x1 = _A.getX();
+		int y1 = _A.getY();
 		
-		int x2 = B.getX();
-		int y2 = B.getY();
+		int x2 = _B.getX();
+		int y2 = _B.getY();
 		
 		int x3 = C.getX();
 		int y3 = C.getY();
@@ -155,12 +140,12 @@ public class Triangle2D extends StructureGeometrique {
 	
 	public double calculRayon() {
 
-		double pab = A.distance(B);
-		double pbc = B.distance(C);
-		double pac = A.distance(C);
+		double pab = _A.distance(_B);
+		double pbc = _B.distance(C);
+		double pac = _A.distance(C);
 		
-		Vector2D vab = new Vector2D(A, B);
-		Vector2D vac = new Vector2D(A, C);
+		Vector2D vab = new Vector2D(_A, _B);
+		Vector2D vac = new Vector2D(_A, C);
 		
 		double r = (pab * pbc * pac) / (2 * vab.determinant(vac));
 		
@@ -172,17 +157,13 @@ public class Triangle2D extends StructureGeometrique {
 	
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(Color.CYAN);
-		g2d.drawLine(A.getX(), A.getY(), B.getX(), B.getY());
-		g2d.drawLine(B.getX(), B.getY(), C.getX(), C.getY());
-		g2d.drawLine(A.getX(), A.getY(), C.getX(), C.getY());
-		
-		//Shape theCircle = new Ellipse2D.Double(getCenter().getX() - getRayon(), getCenter().getY() - getRayon(), 2.0 * getRayon(), 2.0 * getRayon());
-		//g2d.setColor(Color.BLUE);
-		//g2d.draw(theCircle);
+		g2d.drawLine(_A.getX(), _A.getY(), _B.getX(), _B.getY());
+		g2d.drawLine(_B.getX(), _B.getY(), C.getX(), C.getY());
+		g2d.drawLine(_A.getX(), _A.getY(), C.getX(), C.getY());
 	}
 
 	public double getRayon() {
-		return rayon;
+		return _rayon;
 	}
 	
 	
@@ -190,8 +171,8 @@ public class Triangle2D extends StructureGeometrique {
 		
 		List<Point2D> points = new ArrayList<Point2D>();
 		
-		points.add(A);
-		points.add(B);
+		points.add(_A);
+		points.add(_B);
 		points.add(C);
 		
 		return points;		
@@ -201,11 +182,11 @@ public class Triangle2D extends StructureGeometrique {
 		
 		for(Triangle2D triangle : triangles) {
 	
-			if(voisin.size() == 3)
+			if(_neighbors.size() == 3)
 				return;
 			
 			if(this.isVoisin(triangle))
-				voisin.add(triangle);
+				_neighbors.add(triangle);
 		}
 	}
 	
@@ -261,36 +242,6 @@ public class Triangle2D extends StructureGeometrique {
 	}
 	
 	public void flip(Triangle2D t2) {
-
-		/*
-		
-		List<Point2D> sommetCommun = new ArrayList<Point2D>();
-		
-		for(Point2D t1p : getSommets()) {
-			for(Point2D t2p : t2.getSommets()) {
-				if(t1p.equals(t2p)) {
-					sommetCommun.add(t1p);
-				}
-			}
-		}
-	
-		if(sommetCommun.size() == 2) { 
-			
-			Point2D c1 = getOtherSommet(sommetCommun.get(0), sommetCommun.get(1));
-			Point2D c2 = t2.getOtherSommet(sommetCommun.get(0), sommetCommun.get(1));
-		
-			Triangle2D tempT1 = new Triangle2D(c1, sommetCommun.get(0), c2);
-			Triangle2D tempT2 = new Triangle2D(c1, sommetCommun.get(1), c2);
-			
-			this.setA(tempT1.getA());
-			this.setB(tempT1.getB());
-			this.setC(tempT1.getC());
-			
-			t2.setA(tempT2.getA());
-			t2.setB(tempT2.getB());
-			t2.setC(tempT2.getC());
-		}*/
-
 		//Found not common point in first triangle
 		List<Point2D> flipper = new ArrayList<Point2D>();
 		flipper.addAll(getPoints());
@@ -316,15 +267,6 @@ public class Triangle2D extends StructureGeometrique {
 		other.addAll(flipper);
 		other.addAll(flipper2);
 		other.add(flipped.get(1));
-/*
-		System.out.println("tutut");
-		System.out.println(t1.get(0).toString());
-		System.out.println(t1.get(1).toString());
-		System.out.println(t1.get(2).toString());
-
-		System.out.println(other.get(0).toString());
-		System.out.println(other.get(1).toString());
-		System.out.println(other.get(2).toString());*/
 
 		setA(other.get(0));
 		setB(other.get(1));
@@ -340,51 +282,10 @@ public class Triangle2D extends StructureGeometrique {
 	}
 	
 	public List<Triangle2D> getVoisin() {
-		return voisin;
+		return _neighbors;
 	}
 	
 	public boolean isFlippable(Triangle2D t2) {
-
-		/*
-		List<Double> anglesT1 = this.getAngles();
-		List<Double> anglesT2 = t2.getAngles();
-
-		List<Double> A1 = new ArrayList<Double>();
-		A1.addAll(anglesT1);
-		A1.addAll(anglesT2);
-		
-		Collections.sort(A1);
-		System.out.println("\nA1");
-		for(Double d: A1) 
-			System.out.println(d);
-		System.out.println("\nFin");
-
-		/*
-		List<Triangle2D> flipped = this.getFlip(t2);
-		
-		if(flipped.size() == 2) {
-			anglesT1 = flipped.get(0).getAngles();
-			anglesT2 = flipped.get(1).getAngles();
-			List<Double> A2 = new ArrayList<Double>();
-			A2.addAll(anglesT1);
-			A2.addAll(anglesT2);
-					
-			Collections.sort(A2);
-			
-			System.out.println("A1");
-
-			for(Double d: A1) 
-				System.out.println(d);
-			
-			for(int i = 0; i < A1.size(); i++) {
-				if(A2.get(i) > A1.get(1))
-					return true;
-				if(A1.get(i) > A2.get(1))
-					return false;
-			}
-		}
-		
-		*/
 
 		Circle2D circle = new Circle2D(this);
 		List<Point2D> flipper2 = new ArrayList<Point2D>();
@@ -394,10 +295,6 @@ public class Triangle2D extends StructureGeometrique {
 		flipper2.remove(getA());
 		flipper2.remove(getB());
 		flipper2.remove(getC());
-/*
-		if(flipper2.size() != 1) {
-			return false;
-		}*/
 
 		return circle.isInCircle(flipper2.get(0));
 	}

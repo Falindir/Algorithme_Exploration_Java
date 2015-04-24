@@ -4,46 +4,41 @@ import tp.tp1.PointSegment;
 
 public class Vector2D {
 
-	private int x;
-	private int y;
-	
-	public Vector2D(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
+	private int _vx;
+	private int _vy;
+
 	public Vector2D(Point2D p1, Point2D p2) {
-		x = p2.getX() - p1.getX();
-		y = p2.getY() - p1.getY();
+		_vx = p2.getX() - p1.getX();
+		_vy = p2.getY() - p1.getY();
 	}
 
 	public Vector2D(PointSegment left, PointSegment right) {
-		x =  (int) (right.getX() - left.getX());
-		y = (int) (right.getY() - left.getY());
+		_vx =  (int) (right.getX() - left.getX());
+		_vy = (int) (right.getY() - left.getY());
 	}
 
 	public int getX() {
-		return x;
+		return _vx;
 	}
 
 	public void setX(int x) {
-		this.x = x;
+		_vx = x;
 	}
 
 	public int getY() {
-		return y;
+		return _vy;
 	}
 
 	public void setY(int y) {
-		this.y = y;
+		_vy = y;
 	}
 	
 	public int produitScalaire(Vector2D v) {
-		return this.x * v.x + this.y * v.y;
+		return _vx * v._vx + _vy * v._vy;
 	}
 	
 	public int determinant(Vector2D v) {
-		return this.x * v.y - this.y * v.x;
+		return _vx * v._vy - _vy * v._vx;
 	}
 
 	public double norm() {

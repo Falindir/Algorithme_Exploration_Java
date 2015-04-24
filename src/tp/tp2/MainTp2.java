@@ -14,7 +14,7 @@ public class MainTp2 {
 		vRP1.drawListRandomPoint(50);
 		vRP1.drawEnvConvJarvis();
 		frame.addView(vRP1, "Random Point Jarvis");
-		
+
 		ViewEnveloppeConvexe vRP2 = new ViewEnveloppeConvexe(width, height);
 		vRP2.drawListRandomPoint(50);
 		vRP2.drawEnvConvGraham();

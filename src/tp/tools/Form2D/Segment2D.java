@@ -10,19 +10,19 @@ import java.util.List;
 
 public class Segment2D extends StructureGeometrique {
 
-	private Point2D p1;
-	private Point2D p2;
+	private Point2D _p1;
+	private Point2D _p2;
 	private Color lineColor;
 	
 	public Segment2D(Point2D p1, Point2D p2) {
 		super("");
 		if(p1.isInFirstX(p2)) {
-			this.p1 = p1;
-			this.p2 = p2;
+			_p1 = p1;
+			_p2 = p2;
 		}
 		else {
-			this.p1 = p2;
-			this.p2 = p1;
+			_p1 = p2;
+			_p2 = p1;
 		}
 		
 		this.lineColor = ColorTools.SEGMENT;
@@ -30,30 +30,30 @@ public class Segment2D extends StructureGeometrique {
 
 	public Segment2D(String name, Point2D p1, Point2D p2) {
 		super(name);
-		this.p1 = p1;
-		this.p2 = p2;
+		_p1 = p1;
+		_p2 = p2;
 		this.lineColor = ColorTools.SEGMENT;
 	}
 	
 	public Point2D getP1() {
-		return p1;
+		return _p1;
 	}
 
 	public void setP1(Point2D p1) {
-		this.p1 = p1;
+		_p1 = p1;
 	}
 
 	public Point2D getP2() {
-		return p2;
+		return _p2;
 	}
 
 	public void setP2(Point2D p2) {
-		this.p2 = p2;
+		_p2 = p2;
 	}
 
 	public void draw(Graphics2D g2d) {
 		g2d.setColor(lineColor);
-		g2d.drawLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+		g2d.drawLine(_p1.getX(), _p1.getY(), _p2.getX(), _p2.getY());
 	}
 
 	public Color getLineColor() {
@@ -99,14 +99,14 @@ public class Segment2D extends StructureGeometrique {
 	}
 
 	public double calculCoefSegment() {
-		if((p2.getX() - p1.getX()) == 0)
+		if((_p2.getX() - _p1.getX()) == 0)
 			return 0;
 		else
-			return (p2.getY()-p1.getY()) / (p2.getX() - p1.getX());
+			return (_p2.getY()-_p1.getY()) / (_p2.getX() - _p1.getX());
 	}
 
 	public double calculConstSegment(double m) {
-		return p1.getY() - (m * p1.getX());
+		return _p1.getY() - (m * _p1.getX());
 	}
 
 	public static List<Segment2D> constructSegment (List<Point2D> points) {
@@ -117,5 +117,9 @@ public class Segment2D extends StructureGeometrique {
 			segments.add(new Segment2D(points.get(i), points.get(i + 1)));
 
 		return segments;
+	}
+
+	public void setLineColor(Color lineColor) {
+		this.lineColor = lineColor;
 	}
 }

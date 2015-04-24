@@ -1,6 +1,9 @@
 package tp.tools;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ColorTools {
 	
@@ -13,5 +16,14 @@ public class ColorTools {
 	public static Color POINT_ZONE = new Color (125, 45, 125);
 	
 	public static Color SEGMENT = new Color(25,25,25);
+
+	public static Color getRandomColor() {
+
+		Random generator = new Random();
+
+		Color c = Color.getHSBColor(generator.nextFloat(), 1, 1);
+	
+		return c;
+	}
 	
 }
