@@ -40,6 +40,8 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 	private PointSegment p2;
 	private boolean firstPoint;
 	private boolean secondPoint;
+
+	private Segment segmentCourant;
 	
 	private Segment s;
 	
@@ -270,12 +272,10 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 					p2 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
 					secondPoint = false;
 					firstPoint = true;
-				
 					Segment s = new Segment(p1, p2);
 					s.setNameSegment("S" + (segments.size() - 1));
 					segments.add(s);
 					repaint();
-					
 				}
 			}
 		}
@@ -345,9 +345,9 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 	public void drawIntersectedPoint(Graphics2D g2d) {
 		sweepLine.drawListPointSegment(g2d);
 	}
-	
-	
-	
+
+
+
 }
 	
 

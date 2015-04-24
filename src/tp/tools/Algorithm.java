@@ -216,8 +216,6 @@ public class Algorithm {
     
     public static List<Triangle2D> Delaunay (List<Triangle2D> triangles) {
 
-		System.out.println("In Delaunay" + triangles.size());
-
 		List<Triangle2D> triangulation = new ArrayList<Triangle2D>();
 		triangulation.addAll(triangles);
 

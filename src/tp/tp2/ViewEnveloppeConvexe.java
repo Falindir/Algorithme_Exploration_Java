@@ -120,7 +120,6 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		}
 	
 		for (Segment2D s: segmentEnvConvexe) {
-			System.out.println(_Jarvis);
 			if(_Jarvis) {
 				s.setLineColor(Color.MAGENTA);
 				s.draw(g2d);
@@ -128,9 +127,6 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 			if(_Graham) {
 				s.setLineColor(Color.GREEN);
 				s.draw(g2d);
-			}
-			else {
-				//s.draw(g2d);
 			}
 		}
 

@@ -22,7 +22,7 @@ public class ColorTools {
 		Random generator = new Random();
 
 		Color c = Color.getHSBColor(generator.nextFloat(), 1, 1);
-	
+
 		return c;
 	}
 	

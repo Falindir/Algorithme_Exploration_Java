@@ -62,7 +62,7 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 		_delaunay = true;
 		_trianglesDelaunay.clear();
 		_trianglesDelaunay.addAll(Algorithm.Delaunay(_trianglesIncrementale));
-		System.out.println("Delaunay triangle" + _trianglesDelaunay.size());
+		System.out.println("Delaunay triangle : " + _trianglesDelaunay.size());
 	}
 
 	public void drawTriangulationVoronoi () {
@@ -94,13 +94,21 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 			p.draw(g2d);
 			p.drawName(g2d);
 		}
-/*
-		for(Triangle2D triangle : triangles) {
-			triangle.draw(g2d);
+
+		if(_incremental) {
+			for(Triangle2D triangle : _trianglesIncrementale) {
+				triangle.draw(g2d);
+			}
+			repaint();
 		}
-*/
 
-
+		if(_delaunay) {
+			for(Triangle2D triangle : _trianglesDelaunay) {
+				triangle.draw(g2d);
+			}
+			repaint();
+		}
+/*
 		for (Point2D p : _voronoi) {
 			p.setColor(ColorTools.POINT_INTERSECT);
 			g2d.setColor(p.getColor());
@@ -120,7 +128,7 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 				}
 			}
 		}
-			
+			*/
 	}
 
 
@@ -132,6 +140,20 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 		p.setName("" + _points.size());
 		_points.add(p);
 		Collections.sort(_points);
+
+		System.out.println("DEDE");
+
+		_trianglesIncrementale.clear();
+		_trianglesIncrementale.addAll(Algorithm.triangulationIncrementale(_points));
+
+		if(_delaunay) {
+
+			_trianglesDelaunay.clear();
+			_trianglesDelaunay.addAll(Algorithm.Delaunay(_trianglesIncrementale));
+
+		}
+
+		repaint();
 /*
 		if(_incremental) {
 			triangles = Algorithm.triangulationIncrementale(_points);
@@ -183,7 +205,4 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 
 	}
 
-	public static List<Point2D> getPoints() {
-		return _points;
-	}
 }
