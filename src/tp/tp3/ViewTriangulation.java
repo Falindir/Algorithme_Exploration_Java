@@ -21,12 +21,12 @@ import tp.tools.Form2D.Triangle2D;
 
 public class ViewTriangulation extends View implements MouseWheelListener, MouseListener {
 
-	private List<Point2D> _points = new ArrayList<Point2D>();
+	private static List<Point2D> _points = new ArrayList<Point2D>();
 
-	private List<Triangle2D> _trianglesIncrementale = new ArrayList<Triangle2D>();
-	private List<Triangle2D> _trianglesDelaunay = new ArrayList<Triangle2D>();
+	private static List<Triangle2D> _trianglesIncrementale = new ArrayList<Triangle2D>();
+	private static List<Triangle2D> _trianglesDelaunay = new ArrayList<Triangle2D>();
 
-	private List<Point2D> _voronoi = new ArrayList<Point2D>();
+	private static List<Point2D> _voronoi = new ArrayList<Point2D>();
 
 	private boolean _incremental = false;
 	private boolean _delaunay = false;
@@ -124,6 +124,8 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 	}
 
 
+
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Point2D p = new Point2D((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.NONE);
@@ -179,5 +181,9 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
 
+	}
+
+	public static List<Point2D> getPoints() {
+		return _points;
 	}
 }

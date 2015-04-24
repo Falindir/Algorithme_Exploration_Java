@@ -13,9 +13,7 @@ public class MainTp1 {
 		int height = 792;
 
 		ViewIntersectSegment vRP1 = new ViewIntersectSegment(width, height);
-		vRP1.drawListRandomPoint(9);
-		vRP1.drawListRandomSegment();
-		vRP1.drawListIntersectRandomSegment();
+		vRP1.drawListRandomSegment(50);
 		frame.addView(vRP1, "Random Point");
 		frame.setFrame();
 	}

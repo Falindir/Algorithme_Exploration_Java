@@ -16,13 +16,13 @@ public class MainTp3 {
 		frame.addView(vRP1, "Random Point trianguler incrementale");
 		
 		ViewTriangulation vRP2 = new ViewTriangulation(width, height);
-		vRP2.drawSameRandomPoint(vRP1.get_points());
-		vRP2.drawTriangulationDelaunay(vRP1.getTriangles());
+		vRP2.drawSameRandomPoint(vRP1.getPoints());
+		vRP2.drawTriangulationDelaunay();
 		frame.addView(vRP2, "Random Point trianguler delaunay");
 
 		ViewTriangulation vRP3 = new ViewTriangulation(width, height);
-		vRP3.drawSameRandomPoint(vRP1.get_points());
-		vRP3.drawTriangulationDelaunay(vRP1.getTriangles());
+		vRP3.drawSameRandomPoint(vRP1.getPoints());
+		vRP3.drawTriangulationDelaunay();
 		vRP3.drawTriangulationVoronoi();
 		frame.addView(vRP3, "Random Point trianguler voronoi");
 		

@@ -1,119 +1,258 @@
 package tp.tp1;
 
-import tp.tools.*;
-import tp.tools.Form2D.Point2D;
-import tp.tools.Form2D.Segment2D;
+import tp.tools.ColorTools;
+import tp.tools.SweepLine;
+import tp.tools.RolePoint;
+import tp.tools.View;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Stack;
+import java.util.TreeSet;
 
-public class ViewIntersectSegment extends View implements MouseWheelListener, MouseListener, KeyListener {
+public class ViewIntersectSegment extends View implements MouseWheelListener, MouseListener, KeyListener{
 
-	private int width;
+	private static final long serialVersionUID = 1L;
+	
+	private Color bgColor = ColorTools.BACKGROUND;
+	private Color fgColor = ColorTools.POINT_ZONE;
+	
+	private int width; 
 	private int height;
-
-	private List<Point2D> _points;
-	private List<Point2D> _pointsIntersect;
-	private List<Segment2D> _segments;
-	private List<Segment2D> _segmentsIntersect;
-
-	private SweepLine _sweepLine;
-
+	private List<Segment> segments;
+	private SweepLine sweepLine;
+	
 	// Pour placer les point à la main
-	private Point2D p1;
-	private Point2D p2;
+	private PointSegment p1;
+	private PointSegment p2;
 	private boolean firstPoint;
 	private boolean secondPoint;
-	private Segment2D s;
+	
+	private Segment s;
+	
+	// FOR TP2
+	private List<PointSegment> points;
 
 	public ViewIntersectSegment(int width, int height) {
 		super(width, height);
-
-		this._points = new ArrayList<Point2D>();
-		this._pointsIntersect = new ArrayList<Point2D>();
-		this._segments = new ArrayList<Segment2D>();
-		this._sweepLine = new SweepLine(this);
-		this._segmentsIntersect = new ArrayList<Segment2D>();
-
-		this.p1 = new Point2D(0, 0);
-		this.p2 = new Point2D(0, 0);
+		this.segments = new ArrayList<Segment>();
+		this.width = width;
+		this.height = height;
+		this.sweepLine = new SweepLine(this);
+		
+		this.p1 = new PointSegment();
+		this.p2 = new PointSegment();
 		this.firstPoint = true;
 		this.secondPoint = false;
-		this.s = new Segment2D(p1, p2);
-
+		
+		this.points = new ArrayList<PointSegment>();
+		
+		setPreferredSize(new Dimension(width, height));
+		setBackground(bgColor);
 		addMouseListener(this);
 		addMouseWheelListener(this);
 		addKeyListener(this);
 		setFocusable(true);
 		requestFocus();
 	}
-
-	public void drawListRandomPoint (int numberPoints) {
-		_points = Algorithm.generateRandomPointForSegment(numberPoints, width, height, RolePoint.BEGIN);
+	
+	public void drawListRandomSegment (int numberSegments) {
+		segments = Segment.randomSegment(numberSegments);
 	}
-
-	public void drawListRandomSegment () {
-		_segments = Segment2D.constructSegment(_points);
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setPaintMode();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,	RenderingHints.VALUE_ANTIALIAS_ON);
-
-		drawListIntersectRandomSegment();
-
-		for (Point2D p : _points) {
-			g2d.setColor(p.getColor());
-			p.draw2(g2d);
-		}
-
-		for (Segment2D s: _segments) {
-			g2d.setColor(Color.black);
-			s.draw(g2d);
-		}
-
-		for (Point2D p : _pointsIntersect) {
-			g2d.setColor(Color.RED);
-			p.draw(g2d);
-		}
-
-
+	
+	public void drawListRandolPoint (int numberPoints) {
+		
+		points = PointSegment.randomPoint(numberPoints, width, height);
 	}
 
 	public void drawListIntersectRandomSegment() {
-		List<Segment2D> segmentsIntersect = new ArrayList<Segment2D>();
+		List<Segment> segmentsIntersect = new ArrayList<Segment>(); 
+			
+        for(Segment ss1: segments) {
+        	
+        	for(Segment ss2: segments) {
+        		
+        		if(!ss1.equals(ss2)) {
+        			
+        			if(ss1.intersectent(ss2)) {
+        				
+        				if(!segmentsIntersect.contains(ss1))
+        					segmentsIntersect.add(ss1);
+        				
+        				if(!segmentsIntersect.contains(ss2))
+        					segmentsIntersect.add(ss2);
+        			}
+        		}
+        	}
+        }
+        
+		segments = segmentsIntersect;
+		System.out.println("Numbre intersect : " + segments.size());
+	}
+	
+	public void drawListIntersectRandomSegmentBentleyOttman() {
+		
+		List<Segment> segmentsIntersect = new ArrayList<Segment>(); 
+		
+		List<PointSegment> ech = new ArrayList<PointSegment>();
+		
+		Stack<PointSegment> ech2 = new Stack<PointSegment>();
+		
+		List<PointSegment> leftPointSegment = new ArrayList<PointSegment>();
+		List<PointSegment> rightPointSegment = new ArrayList<PointSegment>();
+		
+		for(Segment s : segments) {
+			ech.add(s.getLeftPoint());
+			ech.add(s.getRightPoint());
+			leftPointSegment.add(s.getLeftPoint());
+			rightPointSegment.add(s.getRightPoint());
+		}
+		
+		Collections.sort(ech, new Comparator<PointSegment>() {
+		    @Override
+		    public int compare(PointSegment o1, PointSegment o2) {
+			if (o1.getX() < o2.getX())
+			    return -1;
+			else if (o1.getX() == o2.getX())
+			    return 0;
+			else
+			    return 1;
+		    }
+		});
+		
+		Collections.reverse(ech); 
+		
+		ech2.addAll(ech);
+					
+		TreeSet<Segment> verticalOrder = new TreeSet<Segment>(
+				new Comparator<Segment>() {
+				    @Override
+				    public int compare(Segment o1, Segment o2) {
+					if (o1.getLeftPoint().getY() < o2.getRightPoint().getY())
+					    return -1;
+					else if (o1 == o2)
+					    return 0;
+					else if (o1.getLeftPoint().getY() == o2.getLeftPoint().getY()
+						&& o1.getRightPoint().getY() < o2.getRightPoint().getY())
+					    return -1;
+					else if (o1.getLeftPoint().getY() == o2.getLeftPoint().getY()
+						&& o1.getRightPoint().getY() > o2.getRightPoint().getY())
+					    return 1;
+					else
+					    return 1;
+				    }
+		});
+		
+		int position = 0;
+		//for(PointSegment p : ech){
+			while(!ech2.isEmpty()) {
+				PointSegment p = ech2.pop();
+				
+				if(leftPointSegment.contains(p)) {
+					position = leftPointSegment.indexOf(p);
+					Segment s1 = leftPointSegment.get(position).getSegmentPoint();
+					verticalOrder.add(s1);
+					Segment s2 = verticalOrder.higher(s1);
+					
+					if (s2 != null) {
+					    if (s2.intersectent(s1)) {
+					    	
+					    	if(!segmentsIntersect.contains(s1))
+	        					segmentsIntersect.add(s1);
+	        				
+	        				if(!segmentsIntersect.contains(s2))
+	        					segmentsIntersect.add(s2);
 
-		for(Segment2D ss1: _segments) {
-
-			for(Segment2D ss2: _segments) {
-
-				if(!ss1.equals(ss2)) {
-
-					if(ss1.intersectent(ss2)) {
-
-						if(!segmentsIntersect.contains(ss1))
-							segmentsIntersect.add(ss1);
-
-						if(!segmentsIntersect.contains(ss2))
-							segmentsIntersect.add(ss2);
-
-						Point2D intersect = ss1.getIntersectedPoint(ss2);
-						_pointsIntersect.add(intersect);
-						intersect.setColor(ColorTools.POINT_BEGIN);
-						intersect.setRole(RolePoint.INTERSECT);
-					}
+	        				PointSegment intersect = s2.getIntersectedPoint(s1);
+	        				ech2.add(intersect);				
+					    }
+				}
+				
+				s2 = verticalOrder.lower(s1);
+				if (s2 != null) {
+				    if (s2.intersectent(s1)) {
+				    	if(!segmentsIntersect.contains(s1))
+        					segmentsIntersect.add(s1);
+        				
+        				if(!segmentsIntersect.contains(s2))
+        					segmentsIntersect.add(s2);
+        				
+        				PointSegment intersect = s2.getIntersectedPoint(s1);
+        				ech2.add(intersect);
+				    }
 				}
 			}
+			
+			if(rightPointSegment.contains(p)) {
+				position = rightPointSegment.indexOf(p);
+				Segment s1 = rightPointSegment.get(position).getSegmentPoint();
+				Segment upper = verticalOrder.higher(s1);
+				Segment downer = verticalOrder.lower(s1);
+				
+				if (upper != null && downer != null) {
+					if (upper.intersectent(downer)) {
+						if(!segmentsIntersect.contains(upper))
+        					segmentsIntersect.add(upper);
+        				
+        				if(!segmentsIntersect.contains(downer))
+        					segmentsIntersect.add(downer);
+        				
+        				PointSegment intersect = upper.getIntersectedPoint(downer);
+        				ech2.add(intersect);
+					}	
+				}
+				verticalOrder.remove(s1);
+			}
+		}
+		
+		segments = segmentsIntersect;
+		System.out.println("Numbre intersect : " + segments.size());
+	}
+		
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setPaintMode(); 
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,	RenderingHints.VALUE_ANTIALIAS_ON);	
+
+		g2d.setColor(fgColor);
+		
+		for (Segment lg: segments) {
+			lg.drawSegment(g2d);
+			lg.getRightPoint().drawPointSegment(g2d);
+			lg.getLeftPoint().drawPointSegment(g2d);
+			//g2d.drawString("Hello world", 150, 150);
+			g2d.setColor(ColorTools.POINT_NONE);
+			g2d.drawString(lg.getNameSegment(), (int) lg.getLeftPoint().getX()-5, (int) lg.getLeftPoint().getY()-5);
+		}
+		
+		// for TP2 
+		for (PointSegment p : points) {
+			p.drawPointSegment(g2d);
+			g2d.setColor(ColorTools.POINT_BEGIN);
+			
 		}
 
-		_segmentsIntersect.clear();
-		_segmentsIntersect.addAll(segmentsIntersect);
-		System.out.println("Numbre intersect : " + _segmentsIntersect.size());
+		sweepLine.setG2d(g2d);
+		
+		setIntersectedPoint();
+		
+		drawIntersectedPoint(g2d);
+		
+		sweepLine.dessine(g2d);
 	}
 
 	@Override
@@ -121,74 +260,94 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 
 		if (e.getClickCount() == 1){
 
-			if(firstPoint) {
-				p1 = new Point2D ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.BEGIN);
+			if(firstPoint) {	
+				p1 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.BEGIN);
 				firstPoint = false;
 				secondPoint = true;
 			}
 			else {
 				if(secondPoint && !firstPoint) {
-					p2 = new Point2D ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
+					p2 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
 					secondPoint = false;
 					firstPoint = true;
-
-					Segment2D s = new Segment2D(p1, p2);
-					s.setName("S" + (_segments.size() - 1));
-					_segments.add(s);
-					_points.add(p1);
-					_points.add(p2);
+				
+					Segment s = new Segment(p1, p2);
+					s.setNameSegment("S" + (segments.size() - 1));
+					segments.add(s);
 					repaint();
+					
 				}
 			}
 		}
 	}
 
 	@Override
-	public void mousePressed(MouseEvent mouseEvent) {
-
+	public void mouseEntered(MouseEvent arg0) {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent mouseEvent) {
-
+	public void mouseExited(MouseEvent arg0) {
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent mouseEvent) {
-
+	public void mousePressed(MouseEvent arg0) {
 	}
 
 	@Override
-	public void mouseExited(MouseEvent mouseEvent) {
+	public void mouseReleased(MouseEvent arg0) {
+	}
+	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		int scrollUnit = e.getWheelRotation();
+		if (scrollUnit > 0)
+			sweepLine.next(2);
+		repaint();
+	}
 
+	public List<Segment> getSegments() {
+		return segments;
+	}
+
+	public void setSegments(List<Segment> segments) {
+		this.segments = segments;
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-
+	public void keyTyped(KeyEvent key) {
+		
 	}
 
 	@Override
-	public void keyTyped(KeyEvent keyEvent) {
-
+	public void keyPressed(KeyEvent key) {		
+		if(key.getKeyCode() == 107)  // key : +
+			sweepLine.next(2);
+		repaint();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent keyEvent) {
-
+	public void keyReleased(KeyEvent key) {
+		
 	}
 
-	@Override
-	public void keyReleased(KeyEvent keyEvent) {
+	public int getWidth() {
+		return width;
+	}
 
+	public int getHeight() {
+		return height;
 	}
 
 	public void setIntersectedPoint() {
-		_sweepLine.addListPointSegment(_segments);
+		sweepLine.addListPointSegment(segments);
 	}
-
+	
 	public void drawIntersectedPoint(Graphics2D g2d) {
-		_sweepLine.drawListPointSegment(g2d);
+		sweepLine.drawListPointSegment(g2d);
 	}
-
+	
+	
+	
 }
+	
+

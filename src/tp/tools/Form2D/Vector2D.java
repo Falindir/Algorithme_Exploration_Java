@@ -1,5 +1,7 @@
 package tp.tools.Form2D;
 
+import tp.tp1.PointSegment;
+
 public class Vector2D {
 
 	private int x;
@@ -11,8 +13,13 @@ public class Vector2D {
 	}
 	
 	public Vector2D(Point2D p1, Point2D p2) {
-		x = (int)(p2.getX() - p1.getX());
-		y = (int)(p2.getY() - p1.getY());
+		x = p2.getX() - p1.getX();
+		y = p2.getY() - p1.getY();
+	}
+
+	public Vector2D(PointSegment left, PointSegment right) {
+		x =  (int) (right.getX() - left.getX());
+		y = (int) (right.getY() - left.getY());
 	}
 
 	public int getX() {

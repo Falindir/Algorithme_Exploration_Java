@@ -1,7 +1,8 @@
 package tp.tools;
 
-import tp.tools.Form2D.Point2D;
-import tp.tools.Form2D.Segment2D;
+import tp.tools.View;
+import tp.tp1.PointSegment;
+import tp.tp1.Segment;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -15,12 +16,12 @@ public class SweepLine {
 	private int height;
 	private int position;
 	private int stepWidth;
-	private List<Point2D> intersectedPointSegment;
-	private View view; 
+	private List<PointSegment> intersectedPointSegment;
+	private View view;
 	private Graphics2D g2d;
 	
 	public SweepLine(View v){
-		this.intersectedPointSegment = new ArrayList<Point2D>();
+		this.intersectedPointSegment = new ArrayList<PointSegment>();
 		this.position = 0;
 		this.view = v;
 		this.width = view.getWidth();
@@ -57,11 +58,11 @@ public class SweepLine {
 			position = (width - stepWidth) + 5;
 		}
 		
-		for(Point2D point : intersectedPointSegment) {
+		for(PointSegment point : intersectedPointSegment) {
 			
-			if(position > point.getX()) {
+			if(position > point.getCenterX()) {
 				
-				point.setColor(Color.RED);
+				point.setColorPoint(Color.RED);
 			}
 		}
 		
@@ -71,17 +72,17 @@ public class SweepLine {
 		intersectedPointSegment.clear();
 	}
 
-	public void removeListPoint(Point2D point) {
+	public void removeListPoint(PointSegment point) {
 		intersectedPointSegment.remove(point);
 	}
 	
-	public void addPoingSegment(Point2D point) {
+	public void addPoingSegment(PointSegment point) {
 		intersectedPointSegment.add(point);
 	}
 	
 	public void drawListPointSegment(Graphics2D g2d) {
-		for(Point2D point : intersectedPointSegment) {
-			point.draw(g2d);
+		for(PointSegment point : intersectedPointSegment) {
+			point.drawPointSegment(g2d);
 		}
 	}
 	
@@ -93,20 +94,20 @@ public class SweepLine {
 		this.g2d = g2d;
 	}
 
-	public List<Point2D> getIntersectedPointSegment() {
+	public List<PointSegment> getIntersectedPointSegment() {
 		return intersectedPointSegment;
 	}
 	
-	public void addListPointSegment(List<Segment2D> segments) {
-        for(Segment2D ss1: segments) {
+	public void addListPointSegment(List<Segment> segments) {
+        for(Segment ss1: segments) {
         	
-        	for(Segment2D ss2: segments) {
+        	for(Segment ss2: segments) {
         		
         		if(!ss1.equals(ss2)) {
         			
         			if(ss1.intersectent(ss2)) {
-
-						Point2D point = ss1.getIntersectedPoint(ss2);
+        				
+        				PointSegment point = ss1.getIntersectedPoint(ss2);
         				
         				if(!getIntersectedPointSegment().contains(point))
         					addPoingSegment(point);
