@@ -4,6 +4,12 @@ import tp.tools.*;
 import tp.tools.Form2D.Point2D;
 import tp.tools.Form2D.Segment2DWithTriangle2D;
 import tp.tools.Form2D.Triangle2D;
+import tp.tools.algorithm.AlphaComplex;
+import tp.tools.algorithm.AlphaShape;
+import tp.tools.algorithm.Delaunay;
+import tp.tools.algorithm.IncrementalTriangulation;
+import tp.tools.others.FormOfPoint;
+import tp.tools.visualisation.View;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,6 +25,11 @@ public class ViewAlpha extends View {
     private List<Triangle2D> triangles;
 
     private List<Segment2DWithTriangle2D> segments;
+
+    private IncrementalTriangulation _incTriang = new IncrementalTriangulation();
+    private Delaunay _delaunay = new Delaunay();
+    private AlphaComplex _alphaComplex = new AlphaComplex();
+    private AlphaShape _alphaShape = new AlphaShape();
 
     public ViewAlpha(int width, int height) {
         super(width, height);
@@ -89,15 +100,15 @@ public class ViewAlpha extends View {
     }
 
     public void drawTriangulationAlphaComplexe(int alpha){
-        triangles = Algorithm.AlphaComplex(triangles, alpha);
-
+        _alphaComplex.setAlpha(alpha);
+        triangles = _alphaComplex.run(triangles);
     }
 
     public void drawTriangulationIncrementale(List<Point2D> point) {
         List<Point2D> p = new ArrayList<Point2D>();
         p.addAll(point);
         Collections.sort(p);
-        triangles = Algorithm.triangulationIncrementale(p);
+        triangles = _incTriang.run(p);
     }
 
     public void drawTriangulationDelaunay (List<Point2D> point, int type) {
@@ -105,9 +116,9 @@ public class ViewAlpha extends View {
         List<Point2D> p = new ArrayList<Point2D>();
         p.addAll(point);
         Collections.sort(p);
-        triangles = Algorithm.triangulationIncrementale(p);
+        triangles = _incTriang.run(p);
         List<Triangle2D> temp = new ArrayList<Triangle2D>();
-        temp.addAll(Algorithm.Delaunay(triangles));
+        temp.addAll(_delaunay.run(triangles));
         triangles.clear();
         triangles.addAll(temp);
 /*
@@ -139,6 +150,8 @@ public class ViewAlpha extends View {
     }
 
     public void drawTriangulationAlphaShape(int alpha) {
-        segments.addAll(Algorithm.AlphaShape(triangles, alpha, points));
+        _alphaShape.setAlpha(alpha);
+        _alphaShape.setPoints(points);
+        segments.addAll(_alphaShape.run(triangles));
     }
 }

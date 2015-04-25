@@ -1,9 +1,11 @@
 package tp.tp1;
 
-import tp.tools.ColorTools;
-import tp.tools.SweepLine;
-import tp.tools.RolePoint;
-import tp.tools.View;
+import tp.tools.Form2D.needRefactor.PointSegment;
+import tp.tools.Form2D.needRefactor.Segment;
+import tp.tools.others.ColorTools;
+import tp.tools.others.SweepLine;
+import tp.tools.others.RolePoint;
+import tp.tools.visualisation.View;
 
 import java.awt.Color;
 import java.awt.Dimension;

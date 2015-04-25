@@ -1,4 +1,4 @@
-package tp.tools;
+package tp.tools.visualisation;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;

@@ -1,4 +1,6 @@
-package tp.tools;
+package tp.tools.visualisation;
+
+import tp.tools.others.ColorTools;
 
 import java.awt.Dimension;
 

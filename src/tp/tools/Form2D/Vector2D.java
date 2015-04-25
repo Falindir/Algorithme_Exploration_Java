@@ -1,6 +1,6 @@
 package tp.tools.Form2D;
 
-import tp.tp1.PointSegment;
+import tp.tools.Form2D.needRefactor.PointSegment;
 
 public class Vector2D {
 

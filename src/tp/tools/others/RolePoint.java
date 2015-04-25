@@ -1,4 +1,4 @@
-package tp.tools;
+package tp.tools.others;
 
 public enum RolePoint {
 	NONE,

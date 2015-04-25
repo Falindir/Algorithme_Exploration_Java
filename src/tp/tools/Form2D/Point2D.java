@@ -1,7 +1,7 @@
 package tp.tools.Form2D;
 
-import tp.tools.ColorTools;
-import tp.tools.RolePoint;
+import tp.tools.others.ColorTools;
+import tp.tools.others.RolePoint;
 
 import java.awt.Color;
 import java.awt.FontMetrics;

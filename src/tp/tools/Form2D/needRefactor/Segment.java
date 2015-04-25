@@ -1,9 +1,9 @@
-package tp.tp1;
+package tp.tools.Form2D.needRefactor;
 
 
-import tp.tools.ColorTools;
+import tp.tools.others.ColorTools;
 import tp.tools.Form2D.Vector2D;
-import tp.tools.RolePoint;
+import tp.tools.others.RolePoint;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,7 +18,7 @@ public class Segment {
 	private Color lineColor;
 	
 	//Precondition: p1.x < p2.x par convention et pour les besoins de l'algorithme de balayage gauche droite
-	Segment(PointSegment p1, PointSegment p2) {
+	public Segment(PointSegment p1, PointSegment p2) {
 		this.left = p1;
 		this.right = p2;
 		this.lineColor =  ColorTools.SEGMENT;

@@ -1,9 +1,7 @@
 package tp.tp4;
 
-import tp.tools.FormOfPoint;
-import tp.tools.FrameGeometric;
-import tp.tools.View;
-import tp.tp3.ViewTriangulation;
+import tp.tools.others.FormOfPoint;
+import tp.tools.visualisation.FrameGeometric;
 
 public class MainTp4 {
 	public static void main(String[] args) {

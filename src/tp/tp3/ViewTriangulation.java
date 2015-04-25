@@ -16,8 +16,13 @@ import java.util.List;
 
 import tp.tools.*;
 import tp.tools.Form2D.Point2D;
-import tp.tools.Form2D.Segment2D;
 import tp.tools.Form2D.Triangle2D;
+import tp.tools.algorithm.Delaunay;
+import tp.tools.algorithm.IncrementalTriangulation;
+import tp.tools.algorithm.RandomPoint2D;
+import tp.tools.algorithm.Voronoi;
+import tp.tools.others.RolePoint;
+import tp.tools.visualisation.View;
 
 public class ViewTriangulation extends View implements MouseWheelListener, MouseListener {
 
@@ -26,14 +31,21 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 	private static List<Triangle2D> _trianglesIncrementale = new ArrayList<Triangle2D>();
 	private static List<Triangle2D> _trianglesDelaunay = new ArrayList<Triangle2D>();
 
-	private static List<Point2D> _voronoi = new ArrayList<Point2D>();
+	private static List<Point2D> _voronois = new ArrayList<Point2D>();
 
-	private boolean _incremental = false;
-	private boolean _delaunay = false;
-	private boolean _voronay = false;
+	private RandomPoint2D _randomPoint;
+	private IncrementalTriangulation _incTriangul = new IncrementalTriangulation();
+	private Delaunay _delaunay = new Delaunay();
+	private Voronoi _voronoi = new Voronoi();
+
+	private boolean _isIncremental = false;
+	private boolean _isDelaunay = false;
+	private boolean _isVoronay = false;
 
 	public ViewTriangulation(int width, int height) {
 		super(width, height);
+
+		_randomPoint = new RandomPoint2D(width, height);
 
 		addMouseListener(this);
 		addMouseWheelListener(this);
@@ -44,7 +56,7 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 	
 	public void drawListRandomPoint (int numberPoints) {
 		_points.clear();
-		_points.addAll(Algorithm.generateRandomPoint(numberPoints, getWidth(), getHeight(), RolePoint.NONE));
+		_points.addAll(_randomPoint.run(numberPoints));
 	}
 	
 	public void drawSameRandomPoint(List<Point2D> points) {
@@ -53,21 +65,21 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 	}
 	
 	public void drawTriangulationIncrementale () {
-		_incremental = true;
-		_trianglesIncrementale.addAll(Algorithm.triangulationIncrementale(_points));
+		_isIncremental = true;
+		_trianglesIncrementale.addAll(_incTriangul.run(_points));
 		System.out.println("Incrementale triangle : " + _trianglesIncrementale.size());
 	}
 	
 	public void drawTriangulationDelaunay () {
-		_delaunay = true;
+		_isDelaunay = true;
 		_trianglesDelaunay.clear();
-		_trianglesDelaunay.addAll(Algorithm.Delaunay(_trianglesIncrementale));
+		_trianglesDelaunay.addAll(_delaunay.run(_trianglesIncrementale));
 		System.out.println("Delaunay triangle : " + _trianglesDelaunay.size());
 	}
 
 	public void drawTriangulationVoronoi () {
-		_voronay = true;
-		_voronoi.addAll(Algorithm.Voronoi(_trianglesDelaunay));
+		_isVoronay = true;
+		_voronois.addAll(_voronoi.run(_trianglesDelaunay));
 		System.out.println("Voronoi triangle" + _trianglesDelaunay.size());
 	}
 
@@ -95,14 +107,14 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 			p.drawName(g2d);
 		}
 
-		if(_incremental) {
+		if(_isIncremental) {
 			for(Triangle2D triangle : _trianglesIncrementale) {
 				triangle.draw(g2d);
 			}
 			repaint();
 		}
 
-		if(_delaunay) {
+		if(_isDelaunay) {
 			for(Triangle2D triangle : _trianglesDelaunay) {
 				triangle.draw(g2d);
 			}
@@ -141,16 +153,12 @@ public class ViewTriangulation extends View implements MouseWheelListener, Mouse
 		_points.add(p);
 		Collections.sort(_points);
 
-		System.out.println("DEDE");
-
 		_trianglesIncrementale.clear();
-		_trianglesIncrementale.addAll(Algorithm.triangulationIncrementale(_points));
+		_trianglesIncrementale.addAll(_incTriangul.run(_points));
 
-		if(_delaunay) {
-
+		if(_isDelaunay) {
 			_trianglesDelaunay.clear();
-			_trianglesDelaunay.addAll(Algorithm.Delaunay(_trianglesIncrementale));
-
+			_trianglesDelaunay.addAll(_delaunay.run(_trianglesIncrementale));
 		}
 
 		repaint();

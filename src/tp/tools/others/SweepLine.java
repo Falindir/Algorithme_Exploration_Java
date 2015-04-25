@@ -1,8 +1,8 @@
-package tp.tools;
+package tp.tools.others;
 
-import tp.tools.View;
-import tp.tp1.PointSegment;
-import tp.tp1.Segment;
+import tp.tools.visualisation.View;
+import tp.tools.Form2D.needRefactor.PointSegment;
+import tp.tools.Form2D.needRefactor.Segment;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

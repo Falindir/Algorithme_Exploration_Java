@@ -1,4 +1,4 @@
-package tp.tools;
+package tp.tools.others;
 
 import tp.tools.Form2D.Point2D;
 import tp.tools.Form2D.Triangle2D;

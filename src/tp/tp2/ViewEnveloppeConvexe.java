@@ -14,12 +14,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import tp.tools.Algorithm;
-import tp.tools.ColorTools;
+import tp.tools.algorithm.ListPoint2DToSegment2D;
+import tp.tools.algorithm.RandomPoint2D;
+import tp.tools.others.ColorTools;
 import tp.tools.Form2D.Point2D;
-import tp.tools.RolePoint;
+import tp.tools.others.RolePoint;
 import tp.tools.Form2D.Segment2D;
-import tp.tools.View;
+import tp.tools.visualisation.View;
+import tp.tools.algorithm.Graham;
+import tp.tools.algorithm.Jarvis;
 
 public class ViewEnveloppeConvexe extends View implements MouseWheelListener, MouseListener{
 
@@ -33,6 +36,10 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	private List<List<Point2D>> onionSkin = new ArrayList<List<Point2D>>();
 	private List<List<Segment2D>> onionSkinConvexe = new ArrayList<List<Segment2D>>();
 
+	private RandomPoint2D _randomPoint;
+	private Jarvis _jarvis = new Jarvis();
+	private Graham _graham = new Graham();
+
 	private boolean _Jarvis = false;
 	private boolean _Graham = false;
 
@@ -43,7 +50,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		
 		this.points = new ArrayList<Point2D>();
 		this.segmentEnvConvexe = new ArrayList<Segment2D>();
-	
+		_randomPoint = new RandomPoint2D(width, height);
 		
 		this.width = width;
 		this.height = height;
@@ -56,28 +63,24 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	}
 
 	public void drawListRandomPoint (int numberPoints) {
-		points = Algorithm.generateRandomPoint(numberPoints, width, height, RolePoint.BEGIN);
-	}
-	
-	public void drawListFormPoint () {
-		points = Algorithm.generateFormePoint(width, height);
+		points = _randomPoint.run(numberPoints);
 	}
 
 	public void drawEnvConvJarvis() {
 
 		_Jarvis = true;
 
-		pointsEnvConvInit = Algorithm.Jarvis(points);
+		pointsEnvConvInit = _jarvis.run(points);
 
-		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
+		segmentEnvConvexe = ListPoint2DToSegment2D.transform(pointsEnvConvInit);
 	}
 	public void drawEnvConvGraham() {
 
 		_Graham = true;
 
-		pointsEnvConvInit = Algorithm.Graham(points);
+		pointsEnvConvInit = _graham.run(points);
 
-		segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConvInit);
+		segmentEnvConvexe = ListPoint2DToSegment2D.transform(pointsEnvConvInit);
 	}
 
 	public void drawEnvConvOnionSkin() {
@@ -89,11 +92,11 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		while(pointsInitOnion.size() >= 3) {
 			Collections.sort(pointsInitOnion);
 
-			List<Point2D> points = Algorithm.Jarvis(pointsInitOnion);
+			List<Point2D> points = _jarvis.run(pointsInitOnion);
 
 			onionSkin.add(points);
 
-			onionSkinConvexe.add(Algorithm.generateListSegmentWithPoint(points));
+			onionSkinConvexe.add(ListPoint2DToSegment2D.transform(points));
 
 			pointsInitOnion.removeAll(points);
 		}
@@ -139,8 +142,6 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 				s.draw(g2d);
 			}
 		}
-		
-		
 	}
 
 	@Override
@@ -163,9 +164,9 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 				pointsEnvConvInit.add(p);
 				Collections.sort(pointsEnvConvInit);
 
-				List<Point2D> pointsEnvConv = Algorithm.Graham(pointsEnvConvInit);
+				List<Point2D> pointsEnvConv = _graham.run(pointsEnvConvInit);
 
-				segmentEnvConvexe = Algorithm.generateListSegmentWithPoint(pointsEnvConv);
+				segmentEnvConvexe = ListPoint2DToSegment2D.transform(pointsEnvConv);
 
 				repaint();
 			}
@@ -183,12 +184,11 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 			while(pointsInitOnion.size() >= 3) {
 				Collections.sort(pointsInitOnion);
 
-				List<Point2D> points = Algorithm.Jarvis(pointsInitOnion);
-
+				List<Point2D> points = _jarvis.run(pointsInitOnion);
 
 				onionSkin.add(points);
 
-				onionSkinConvexe.add(Algorithm.generateListSegmentWithPoint(points));
+				onionSkinConvexe.add(ListPoint2DToSegment2D.transform(points));
 
 				pointsInitOnion.removeAll(points);
 			}

@@ -1,7 +1,6 @@
 package tp.tp1;
 
-import tp.tools.FrameGeometric;
-import tp.tp2.ViewEnveloppeConvexe;
+import tp.tools.visualisation.FrameGeometric;
 
 public class MainTp1 {
 

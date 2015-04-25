@@ -1,6 +1,6 @@
 package tp.tp2;
 
-import tp.tools.FrameGeometric;
+import tp.tools.visualisation.FrameGeometric;
 
 public class MainTp2 {
 

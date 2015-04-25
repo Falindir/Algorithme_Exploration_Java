@@ -1,7 +1,5 @@
 package tp.tools.Form2D;
 
-import tp.tools.ColorTools;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
