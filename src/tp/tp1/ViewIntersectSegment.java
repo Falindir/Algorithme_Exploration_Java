@@ -10,12 +10,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +18,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeSet;
 
-public class ViewIntersectSegment extends View implements MouseWheelListener, MouseListener, KeyListener{
+public class ViewIntersectSegment extends View implements MouseWheelListener, MouseListener, KeyListener, MouseMotionListener{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -38,15 +33,10 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 	// Pour placer les point à la main
 	private PointSegment p1;
 	private PointSegment p2;
-	private boolean firstPoint;
-	private boolean secondPoint;
+
+	private boolean startDrawSegment = false;
 
 	private Segment segmentCourant;
-	
-	private Segment s;
-	
-	// FOR TP2
-	private List<PointSegment> points;
 
 	public ViewIntersectSegment(int width, int height) {
 		super(width, height);
@@ -57,27 +47,19 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 		
 		this.p1 = new PointSegment();
 		this.p2 = new PointSegment();
-		this.firstPoint = true;
-		this.secondPoint = false;
-		
-		this.points = new ArrayList<PointSegment>();
-		
+
 		setPreferredSize(new Dimension(width, height));
 		setBackground(bgColor);
 		addMouseListener(this);
 		addMouseWheelListener(this);
 		addKeyListener(this);
+		addMouseMotionListener(this);
 		setFocusable(true);
 		requestFocus();
 	}
 	
 	public void drawListRandomSegment (int numberSegments) {
 		segments = Segment.randomSegment(numberSegments);
-	}
-	
-	public void drawListRandolPoint (int numberPoints) {
-		
-		points = PointSegment.randomPoint(numberPoints, width, height);
 	}
 
 	public void drawListIntersectRandomSegment() {
@@ -231,7 +213,11 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,	RenderingHints.VALUE_ANTIALIAS_ON);	
 
 		g2d.setColor(fgColor);
-		
+
+		if(segmentCourant != null && !segments.contains(segmentCourant))
+			segmentCourant.drawSegment(g2d);
+
+
 		for (Segment lg: segments) {
 			lg.drawSegment(g2d);
 			lg.getRightPoint().drawPointSegment(g2d);
@@ -240,43 +226,28 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 			g2d.setColor(ColorTools.POINT_NONE);
 			g2d.drawString(lg.getNameSegment(), (int) lg.getLeftPoint().getX()-5, (int) lg.getLeftPoint().getY()-5);
 		}
-		
-		// for TP2 
-		for (PointSegment p : points) {
-			p.drawPointSegment(g2d);
-			g2d.setColor(ColorTools.POINT_BEGIN);
-			
-		}
 
 		sweepLine.setG2d(g2d);
-		
 		setIntersectedPoint();
-		
 		drawIntersectedPoint(g2d);
-		
 		sweepLine.dessine(g2d);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (e.getClickCount() == 1){
-
-			if(firstPoint) {	
+		if (e.getClickCount() == 1) {
+			if(!startDrawSegment) {
 				p1 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.BEGIN);
-				firstPoint = false;
-				secondPoint = true;
+				p2 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
+				startDrawSegment = true;
+				segmentCourant = new Segment(p1, p2);
+				repaint();
 			}
 			else {
-				if(secondPoint && !firstPoint) {
-					p2 = new PointSegment ((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
-					secondPoint = false;
-					firstPoint = true;
-					Segment s = new Segment(p1, p2);
-					s.setNameSegment("S" + (segments.size() - 1));
-					segments.add(s);
-					repaint();
-				}
+				startDrawSegment = false;
+				segments.add(segmentCourant);
+				segmentCourant.setNameSegment("S" + (segments.size() - 1));
+				repaint();
 			}
 		}
 	}
@@ -346,8 +317,18 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 		sweepLine.drawListPointSegment(g2d);
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent mouseEvent) {
+	}
 
-
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		if(startDrawSegment) {
+			p2 = new PointSegment((int) e.getPoint().getX(), (int) e.getPoint().getY(), RolePoint.END);
+			segmentCourant = new Segment(p1, p2);
+			repaint();
+		}
+	}
 }
 	
 

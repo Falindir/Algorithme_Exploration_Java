@@ -15,10 +15,10 @@ public class MainTp3 {
 		int height = 792;
 
 		ViewTriangulation vRP1 = new ViewTriangulation(width, height);
-		vRP1.drawListRandomPoint(2);
+		vRP1.drawListRandomPoint(200);
 		vRP1.drawTriangulationIncrementale();
 		frame.addView(vRP1, "Random Point trianguler incrementale");
-
+/*
 		ViewTriangulation vRP2 = new ViewTriangulation(width, height);
 		vRP2.drawTriangulationDelaunay();
 		frame.addView(vRP2, "Random Point trianguler delaunay");
