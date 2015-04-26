@@ -210,6 +210,16 @@ public class Triangle2D extends StructureGeometrique {
 			return true;
 		return false;
 	}
+
+
+	public List<Segment2D> getEdges()
+	{
+		List<Segment2D> l=new ArrayList<Segment2D>();
+		l.add(new Segment2D(_A, _B));
+		l.add(new Segment2D(_B, C));
+		l.add(new Segment2D(C, _A));
+		return l;
+	}
 	
 	public List<Triangle2D> getFlip(Triangle2D t2) {
 		List<Triangle2D> triangles = new ArrayList<Triangle2D>();
@@ -299,5 +309,13 @@ public class Triangle2D extends StructureGeometrique {
 
 	public static double car(double n) {
 		return n * n;
+	}
+
+	public Circle2D getCircumscribedCircle() {
+		return null;
+	}
+
+	public double getRadiusCircle() {
+		return calculRayon();
 	}
 }

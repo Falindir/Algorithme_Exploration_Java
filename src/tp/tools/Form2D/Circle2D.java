@@ -15,6 +15,12 @@ public class Circle2D {
         _radius = radius;
     }
 
+    public Circle2D(double x, double y, double radius) {
+        _posX = x;
+        _posY = y;
+        _radius = radius;
+    }
+
     public Circle2D(Triangle2D triangle) {
         int x1 = triangle.getA().getX();
         int y1 = triangle.getA().getY();

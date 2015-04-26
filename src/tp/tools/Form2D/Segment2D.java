@@ -1,5 +1,6 @@
 package tp.tools.Form2D;
 
+import tp.tools.Form2D.needRefactor.Segment;
 import tp.tools.others.ColorTools;
 import tp.tools.others.RolePoint;
 
@@ -121,5 +122,16 @@ public class Segment2D extends StructureGeometrique {
 
 	public void setLineColor(Color lineColor) {
 		this.lineColor = lineColor;
+	}
+
+	public boolean isSameSegment(Segment2D s) {
+
+		if(getP1().getX() == s.getP1().getX() && getP1().getY() == s.getP1().getY() && getP2().getX() == s.getP2().getX() && getP2().getY() == s.getP2().getY())
+			return true;
+
+		if(getP1().getX() == s.getP2().getX() && getP1().getY() == s.getP2().getY() && getP2().getX() == s.getP1().getX() && getP2().getY() == s.getP1().getY())
+			return true;
+
+		return false;
 	}
 }

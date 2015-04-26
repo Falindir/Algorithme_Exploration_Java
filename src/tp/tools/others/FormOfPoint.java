@@ -41,81 +41,29 @@ public class FormOfPoint {
 
 
 
-        int i = 0;
         for(int[] s : sommet) {
             Point2D point = new Point2D(s[0], s[1]);
-           // point.setName("" + i);
             points.add(point);
-            i++;
         }
 
         Collections.sort(points);
 
-        int j = 0;
-        for(Point2D point : points) {
-
-           // point.setName(""+ j);
-            j++;
-        }
-/*
         List<Point2D> pp = new ArrayList<Point2D>();
-        for(int k = 0; k < 30; k++) {
 
-            pp.add(points.get(k));
-        }*/
+        for(int i = 0; i < points.size() - 1; i++) {
+
+            if(points.get(i).getX() == points.get(i+1).getX() && points.get(i).getY() == points.get(i+1).getY() ) {
+                pp.add(points.get(i));
+            }
+        }
+
+        for(Point2D i : pp) {
+            points.remove(i);
+        }
+
+        Collections.sort(points);
+
         return points;
-    }
-
-    public static List<Triangle2D> getForm1Triangle() {
-
-        List<Point2D> points = getForm1();
-
-        List<Triangle2D> triangles = new ArrayList<Triangle2D>();
-
-        triangles.add(new Triangle2D(points.get(0), points.get(1), points.get(2)));
-        triangles.add(new Triangle2D(points.get(3), points.get(1), points.get(2)));
-        triangles.add(new Triangle2D(points.get(0), points.get(1), points.get(4)));
-        triangles.add(new Triangle2D(points.get(4), points.get(1), points.get(3)));
-        triangles.add(new Triangle2D(points.get(4), points.get(5), points.get(3)));
-        triangles.add(new Triangle2D(points.get(4), points.get(5), points.get(6)));
-        triangles.add(new Triangle2D(points.get(4), points.get(6), points.get(3)));
-        triangles.add(new Triangle2D(points.get(7), points.get(6), points.get(3)));
-        triangles.add(new Triangle2D(points.get(4), points.get(6), points.get(8)));
-        triangles.add(new Triangle2D(points.get(6), points.get(7), points.get(8)));
-        triangles.add(new Triangle2D(points.get(3), points.get(7), points.get(8)));
-        triangles.add(new Triangle2D(points.get(8), points.get(9), points.get(3)));
-        triangles.add(new Triangle2D(points.get(2), points.get(3), points.get(10)));
-        triangles.add(new Triangle2D(points.get(9), points.get(3), points.get(10)));
-        triangles.add(new Triangle2D(points.get(9), points.get(10), points.get(11)));
-        triangles.add(new Triangle2D(points.get(9), points.get(8), points.get(11)));
-        triangles.add(new Triangle2D(points.get(12), points.get(10), points.get(11)));
-        triangles.add(new Triangle2D(points.get(12), points.get(10), points.get(13)));
-        triangles.add(new Triangle2D(points.get(14), points.get(10), points.get(13)));
-        triangles.add(new Triangle2D(points.get(14), points.get(12), points.get(13)));
-        triangles.add(new Triangle2D(points.get(0), points.get(4), points.get(15)));
-        triangles.add(new Triangle2D(points.get(4), points.get(8), points.get(15)));
-        triangles.add(new Triangle2D(points.get(8), points.get(9), points.get(15)));
-        triangles.add(new Triangle2D(points.get(9), points.get(11), points.get(15)));
-        triangles.add(new Triangle2D(points.get(11), points.get(12), points.get(15)));
-        triangles.add(new Triangle2D(points.get(12), points.get(14), points.get(15)));
-        triangles.add(new Triangle2D(points.get(15), points.get(14), points.get(16)));
-        triangles.add(new Triangle2D(points.get(14), points.get(16), points.get(17)));
-        triangles.add(new Triangle2D(points.get(15), points.get(16), points.get(17)));
-        triangles.add(new Triangle2D(points.get(15), points.get(18), points.get(17)));
-        triangles.add(new Triangle2D(points.get(15), points.get(18), points.get(19)));
-        triangles.add(new Triangle2D(points.get(20), points.get(18), points.get(19)));
-        triangles.add(new Triangle2D(points.get(20), points.get(18), points.get(17)));
-
-
-
-
-
-
-
-
-
-
-        return triangles;
     }
 
     public static List<Point2D> getForm2() {
