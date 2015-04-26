@@ -12,6 +12,7 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import tp.tools.algorithm.ListPoint2DToSegment2D;
@@ -34,7 +35,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 	private List<Segment2D> segmentEnvConvexe;
 
 	private List<List<Point2D>> onionSkin = new ArrayList<List<Point2D>>();
-	private List<List<Segment2D>> onionSkinConvexe = new ArrayList<List<Segment2D>>();
+	private LinkedList<List<Segment2D>> onionSkinConvexe = new LinkedList<List<Segment2D>>();
 
 	private RandomPoint2D _randomPoint;
 	private Jarvis _jarvis = new Jarvis();
@@ -45,8 +46,8 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 
 	private boolean onion = false;
 
-	public ViewEnveloppeConvexe(int width, int height) {
-		super(width, height);
+	public ViewEnveloppeConvexe(int width, int height, ControllerTP2 controller) {
+		super(width, height, controller);
 		
 		this.points = new ArrayList<Point2D>();
 		this.segmentEnvConvexe = new ArrayList<Segment2D>();
@@ -89,6 +90,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		List<Point2D> pointsInitOnion = new ArrayList<Point2D>();
 		pointsInitOnion.addAll(points);
 
+
 		while(pointsInitOnion.size() >= 3) {
 			Collections.sort(pointsInitOnion);
 
@@ -99,6 +101,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 			onionSkinConvexe.add(ListPoint2DToSegment2D.transform(points));
 
 			pointsInitOnion.removeAll(points);
+
 		}
 
 	}
@@ -134,7 +137,6 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 		}
 
 		for(int i = 0; i < onionSkinConvexe.size(); i++) {
-
 			Color c = ColorTools.getRandomColor();
 
 			for(Segment2D s : onionSkinConvexe.get(i)) {
@@ -142,6 +144,7 @@ public class ViewEnveloppeConvexe extends View implements MouseWheelListener, Mo
 				s.draw(g2d);
 			}
 		}
+
 	}
 
 	@Override

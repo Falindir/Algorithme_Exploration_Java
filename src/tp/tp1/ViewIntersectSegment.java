@@ -5,6 +5,7 @@ import tp.tools.Form2D.needRefactor.Segment;
 import tp.tools.others.ColorTools;
 import tp.tools.others.SweepLine;
 import tp.tools.others.RolePoint;
+import tp.tools.visualisation.Controller;
 import tp.tools.visualisation.View;
 
 import java.awt.Color;
@@ -40,8 +41,8 @@ public class ViewIntersectSegment extends View implements MouseWheelListener, Mo
 
 	private Segment segmentCourant;
 
-	public ViewIntersectSegment(int width, int height) {
-		super(width, height);
+	public ViewIntersectSegment(int width, int height, ControllerTP1 controller) {
+		super(width, height, controller);
 		this.segments = new ArrayList<Segment>();
 		this.width = width;
 		this.height = height;

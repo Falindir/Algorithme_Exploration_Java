@@ -31,8 +31,8 @@ public class ViewAlpha extends View {
     private AlphaComplex _alphaComplex = new AlphaComplex();
     private AlphaShape _alphaShape = new AlphaShape();
 
-    public ViewAlpha(int width, int height) {
-        super(width, height);
+    public ViewAlpha(int width, int height, ControllerTP4 controller) {
+        super(width, height, controller);
 
         this.width = width;
         this.height = height;
